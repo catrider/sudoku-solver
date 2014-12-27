@@ -24,5 +24,8 @@
 
 (defn get-quadrant
   "Returns the nth quadrant in the form of a map"
-  [n puzzle]
-  ())
+  [[x y] puzzle]
+  (reduce #()
+          {\1 nil \2 nil \3 nil \4 nil \5 nil \6 nil \7 nil \8 nil \9 nil}
+          (map #(take 3 (nthrest % (- y 1)))
+            (take 3 (nthrest puzzle (- x 1))))))
