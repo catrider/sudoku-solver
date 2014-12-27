@@ -16,3 +16,13 @@
               (filter #(not (= \- (nth % 2)))
                 (map #(seq %)
                    (str/split (slurp filepath) #"\n")))))))))
+
+(defn solve-puzzle
+  "Solves the puzzle"
+  [puzzle]
+  ())
+
+(defn get-quadrant
+  "Returns the nth quadrant in the form of a map"
+  [n puzzle]
+  ())

@@ -15,3 +15,19 @@
           [nil \8 \2 nil \4 nil nil nil nil]
           [\1 \7 nil nil nil nil \4 nil nil]]
          (parse-puzzle-file "resources/easy")))))
+
+(deftest get-quadrant-test
+  (testing "get-quadrant"
+    (is (= {\1 nil
+            \2 '(2 3)
+            \3 '(3 1)
+            \4 nil
+            \5 nil
+            \6 '(1 2)
+            \7 nil
+            \8 nil
+            \9 '(3 3)}
+           (get-quadrant 1
+                         [[nil \6 nil]
+                          [nil nil \2]
+                          [\3 nil \9]])))))
