@@ -19,15 +19,15 @@
 (deftest get-quadrant-test
   (testing "get-quadrant"
     (is (= {\1 nil
-            \2 '(2 3)
-            \3 '(3 1)
+            \2 '(1 2)
+            \3 '(2 0)
             \4 nil
             \5 nil
-            \6 '(1 2)
+            \6 '(0 1)
             \7 nil
             \8 nil
-            \9 '(3 3)}
-           (get-quadrant 1
-                         [[nil \6 nil]
-                          [nil nil \2]
-                          [\3 nil \9]])))))
+            \9 '(2 2)}
+           (get-quadrant '(0 0)
+                         [[nil \6 nil nil nil \5 nil \1 \9]
+                          [nil nil \2 \3 nil \1 nil nil nil]
+                          [\3 nil \9 \8 \1 nil nil nil \8]])))))
