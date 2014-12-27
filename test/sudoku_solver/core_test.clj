@@ -17,7 +17,7 @@
          (parse-puzzle-file "resources/easy")))))
 
 (deftest get-quadrant-test
-  (testing "get-quadrant"
+  (testing "get-quadrant in first quadrant"
     (is (= {\1 nil
             \2 '(1 2)
             \3 '(2 0)
@@ -30,4 +30,18 @@
            (get-quadrant '(0 0)
                          [[nil \6 nil nil nil \5 nil \1 \9]
                           [nil nil \2 \3 nil \1 nil nil nil]
-                          [\3 nil \9 \8 \1 nil nil nil \8]])))))
+                          [\3 nil \9 \8 \1 nil nil nil \8]]))))
+  (testing "get-quadrant in second quadrant"
+    (is (= {\1 '(1 2)
+            \2 '(2 1)
+            \3 '(1 0)
+            \4 nil
+            \5 '(0 2)
+            \6 nil
+            \7 nil
+            \8 '(2 0)
+            \9 nil}
+           (get-quadrant '(0 1)
+                         [[nil \6 nil nil nil \5 nil \1 \9]
+                          [nil nil \2 \3 nil \1 nil nil nil]
+                          [\3 nil \9 \8 \2 nil nil nil \8]])))))
