@@ -44,4 +44,24 @@
            (get-quadrant '(0 1)
                          [[nil \6 nil nil nil \5 nil \1 \9]
                           [nil nil \2 \3 nil \1 nil nil nil]
-                          [\3 nil \9 \8 \2 nil nil nil \8]])))))
+                          [\3 nil \9 \8 \2 nil nil nil \8]]))))
+  (testing "get-quadrant in eighth quadrant"
+    (is (= {\1 nil
+            \2 '(1 1)
+            \3 '(2 2)
+            \4 nil
+            \5 '(0 0)
+            \6 nil
+            \7 nil
+            \8 '(2 0)
+            \9 '(0 1)}
+           (get-quadrant '(2 1)
+                         [[nil \6 nil nil nil \5 nil \1 \9]
+                          [nil nil \2 \3 nil \1 nil nil nil]
+                          [nil nil \2 \3 nil \1 nil nil nil]
+                          [nil nil \2 \3 nil \1 nil nil nil]
+                          [nil nil \2 \3 nil \1 nil nil nil]
+                          [nil nil \2 \3 nil \1 nil nil nil]
+                          [nil nil nil \5 \9 nil nil nil nil]
+                          [nil nil nil nil \2 nil nil nil nil]
+                          [nil nil nil \8 nil \3 nil nil nil]])))))
