@@ -39,4 +39,7 @@
         (flatten (map #(seq-of-three y %)
             (seq-of-three x puzzle))))))
 
+(defn assign-number-in-quadrant
+  [[x y] number puzzle]
+  ())
 
