@@ -22,17 +22,21 @@
   [puzzle]
   ())
 
-(defn coordinates-from-index
+(defn- coordinates-from-index
   "Converts an index to coordiantes, assuming the quadrant dimension is 3"
   [index]
   (list (quot index 3) (mod index 3)))
+
+(defn- seq-of-three
+  [index coll]
+  (take 3 (nthrest coll (* 3 index))))
 
 (defn get-quadrant
   "Returns the nth quadrant in the form of a map"
   [[x y] puzzle]
   (apply (partial merge {\1 nil \2 nil \3 nil \4 nil \5 nil \6 nil \7 nil \8 nil \9 nil})
       (map-indexed (fn [idx itm] (if (nil? itm) {} (hash-map itm (coordinates-from-index idx))))
-        (flatten (map #(take 3 (nthrest % (* 3 y)))
-            (take 3 (nthrest puzzle (* 3 x))))))))
+        (flatten (map #(seq-of-three y %)
+            (seq-of-three x puzzle))))))
 
 
