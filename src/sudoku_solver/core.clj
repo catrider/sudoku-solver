@@ -39,7 +39,24 @@
         (flatten (map #(seq-of-three y %)
             (seq-of-three x puzzle))))))
 
+(defn- get-coordinates-of-number-in-quadrant
+  [number quadrant puzzle]
+  (get (get-quadrant quadrant puzzle) number))
+
+(defn lateral-sibling-quadrants
+  "returns quadrants that sit laterally to the passed quadrant"
+  [[x y]]
+  (set (map #(list x %)
+       (filter #(not (= % y))
+                     (range 3)))))
+
+(defn vertical-sibling-quadrants
+  "returns the quadrants that sit vertically from the passed quadrant"
+  [[x y]]
+  (set (map #(list % y)
+         (filter #(not (= % x))
+                       (range 3)))))
+
 (defn assign-number-in-quadrant
   [[x y] number puzzle]
   ())
-
