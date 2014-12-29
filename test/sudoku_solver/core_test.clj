@@ -27,10 +27,9 @@
             \7 nil
             \8 nil
             \9 '(2 2)}
-           (get-quadrant '(0 0)
-                         [[nil \6 nil nil nil \5 nil \1 \9]
+           (get-quadrant [[nil \6 nil nil nil \5 nil \1 \9]
                           [nil nil \2 \3 nil \1 nil nil nil]
-                          [\3 nil \9 \8 \1 nil nil nil \8]]))))
+                          [\3 nil \9 \8 \1 nil nil nil \8]] '(0 0)))))
   (testing "get-quadrant in second quadrant"
     (is (= {\1 '(1 2)
             \2 '(2 1)
@@ -41,10 +40,9 @@
             \7 nil
             \8 '(2 0)
             \9 nil}
-           (get-quadrant '(0 1)
-                         [[nil \6 nil nil nil \5 nil \1 \9]
+           (get-quadrant [[nil \6 nil nil nil \5 nil \1 \9]
                           [nil nil \2 \3 nil \1 nil nil nil]
-                          [\3 nil \9 \8 \2 nil nil nil \8]]))))
+                          [\3 nil \9 \8 \2 nil nil nil \8]] '(0 1)))))
   (testing "get-quadrant in eighth quadrant"
     (is (= {\1 nil
             \2 '(1 1)
@@ -55,8 +53,7 @@
             \7 nil
             \8 '(2 0)
             \9 '(0 1)}
-           (get-quadrant '(2 1)
-                         [[nil \6 nil nil nil \5 nil \1 \9]
+           (get-quadrant [[nil \6 nil nil nil \5 nil \1 \9]
                           [nil nil \2 \3 nil \1 nil nil nil]
                           [nil nil \2 \3 nil \1 nil nil nil]
                           [nil nil \2 \3 nil \1 nil nil nil]
@@ -64,7 +61,7 @@
                           [nil nil \2 \3 nil \1 nil nil nil]
                           [nil nil nil \5 \9 nil nil nil nil]
                           [nil nil nil nil \2 nil nil nil nil]
-                          [nil nil nil \8 nil \3 nil nil nil]])))))
+                          [nil nil nil \8 nil \3 nil nil nil]] '(2 1))))))
 
 (deftest assign-number-in-quadrant-test
   (testing "assign number 1 in the first quadrant"
@@ -77,7 +74,7 @@
             [nil nil nil nil nil nil nil nil nil]
             [\1  nil nil nil nil nil nil nil nil]
             [nil nil nil nil nil nil nil nil nil]]
-           (assign-number-in-quadrant '(0,0) \1 [[nil nil nil nil nil \1  nil nil nil]
+           (assign-number-in-quadrant '(0 0) \1 [[nil nil nil nil nil \1  nil nil nil]
                                                 [nil nil \1  nil nil nil nil nil nil]
                                                 [nil nil nil nil nil nil \1  nil nil]
                                                 [nil nil nil nil nil nil nil nil nil]
