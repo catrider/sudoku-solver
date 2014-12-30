@@ -83,22 +83,8 @@
   [[x y :as coordinates] number puzzle]
   ((fn assign-at-coordinate
      [[x y :as coords]]
-     (do (println coords)
-     (assoc puzzle x (assoc (nth puzzle x) y number)))
+     (assoc puzzle x (assoc (nth puzzle x) y number))
      ) (first (set/difference
                  #{'(0 0) '(0 1) '(0 2) '(1 0) '(1 1) '(1 2) '(2 0) '(2 1) '(2 2)}
-                 (set (remove nil?
-                  (concat
-                   (map (fn impossible-coordinates-in-current-quadrant
-                        [[x y :as coordinates]]
-                        (if (not (nil? coordinates)) '((x 0) (x 1) (x 2)) nil))
-                     (map (fn coordinates-of-number-in-quadrant [quadrant-map] (get quadrant-map number))
-                      (map (partial get-quadrant puzzle)
-                           (lateral-sibling-quadrants coordinates))))
-                   (map (fn impossible-coordinates-in-current-quadrant
-                        [[x y :as coordinates]]
-                        (if (not (nil? coordinates)) '((0 y) (1 y) (2 y)) nil))
-                     (map (fn coordinates-of-number-in-quadrant [quadrant-map] (get quadrant-map number))
-                      (map (partial get-quadrant puzzle)
-                           (vertical-sibling-quadrants coordinates)))))))))
+                 (sibling-eliminated-coordinates puzzle coordinates number)))
    ))

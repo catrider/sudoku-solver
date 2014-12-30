@@ -66,7 +66,7 @@
 (deftest assign-number-in-quadrant-test
   (testing "assign number 1 in the first quadrant"
     (is (= [[nil nil nil nil nil \1  nil nil nil]
-            [nil nil nil nil nil nil nil nil nil]
+            [nil nil \1  nil nil nil nil nil nil]
             [nil nil nil nil nil nil \1  nil nil]
             [nil nil nil nil nil nil nil nil nil]
             [nil nil nil nil nil nil nil nil nil]
@@ -75,7 +75,7 @@
             [\1  nil nil nil nil nil nil nil nil]
             [nil nil nil nil nil nil nil nil nil]]
            (assign-number-in-quadrant '(0 0) \1 [[nil nil nil nil nil \1  nil nil nil]
-                                                [nil nil \1  nil nil nil nil nil nil]
+                                                [nil nil nil  nil nil nil nil nil nil]
                                                 [nil nil nil nil nil nil \1  nil nil]
                                                 [nil nil nil nil nil nil nil nil nil]
                                                 [nil nil nil nil nil nil nil nil nil]
