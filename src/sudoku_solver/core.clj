@@ -81,10 +81,12 @@
 
 (defn assign-number-in-quadrant
   [[x y :as coordinates] number puzzle]
-  ((fn assign-at-coordinate
-     [[x y :as coords]]
-     (assoc puzzle x (assoc (nth puzzle x) y number))
-     ) (first (set/difference
-                 #{'(0 0) '(0 1) '(0 2) '(1 0) '(1 1) '(1 2) '(2 0) '(2 1) '(2 2)}
-                 (sibling-eliminated-coordinates puzzle coordinates number)))
-   ))
+  (let [possible-coordinates-for-number
+        (set/difference
+           #{'(0 0) '(0 1) '(0 2) '(1 0) '(1 1) '(1 2) '(2 0) '(2 1) '(2 2)}
+           (sibling-eliminated-coordinates puzzle coordinates number))]
+    (if (= 1 (count possible-coordinates-for-number))
+      ((fn assign-at-coordinate
+       [[x y :as coords]]
+       (assoc puzzle x (assoc (nth puzzle x) y number))
+       ) (first possible-coordinates-for-number)) puzzle)))
