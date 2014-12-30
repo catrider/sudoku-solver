@@ -58,6 +58,27 @@
          (filter (not-equal-to-number x)
                        (range 3)))))
 
+(defn sibling-eliminated-coordinates
+  [puzzle quadrant number]
+  (set
+   (set/union
+    (reduce (fn accumulate [val a] (apply (partial conj val) a)) #{}
+    (map (fn eliminated-coordinates-based-on-vertical-sibling-coordinates
+                    [[x y :as coordinates]]
+                    (list (list x 0) (list x 1) (list x 2)))
+                  (remove nil?
+                          (map (fn coordinates-of-number-in-quadrant [quadrant-map] (get quadrant-map number))
+                               (map (partial get-quadrant puzzle)
+                                    (lateral-sibling-quadrants quadrant))))))
+    (reduce (fn accumulate [val a] (apply (partial conj val) a)) #{}
+            (map (fn eliminated-coordinates-based-on-lateral-sibling-coordinates
+                    [[x y :as coordinates]]
+                    (list (list 0 y) (list 1 y) (list 2 y)))
+                  (remove nil?
+                          (map (fn coordinates-of-number-in-quadrant [quadrant-map] (get quadrant-map number))
+                               (map (partial get-quadrant puzzle)
+                                    (vertical-sibling-quadrants quadrant)))))))))
+
 (defn assign-number-in-quadrant
   [[x y :as coordinates] number puzzle]
   ((fn assign-at-coordinate

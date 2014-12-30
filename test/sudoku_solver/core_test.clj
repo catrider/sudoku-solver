@@ -92,3 +92,17 @@
     (testing "vertical-sibling-quadrants"
       (is (= #{'(1 0) '(2 0)} (vertical-sibling-quadrants '(0 0))))
       (is (= #{'(1 1) '(0 1)} (vertical-sibling-quadrants '(2 1))))))
+
+  (deftest sibling-eliminated-coordinates-test
+    (testing "impossible-coordinates-for-quadrant"
+      (is (= #{'(0 0) '(0 1) '(0 2) '(2 0) '(2 1) '(2 2) '(1 0) '(1 1)}
+             (sibling-eliminated-coordinates [[nil nil nil nil nil \1  nil nil nil]
+                                                [nil nil \1  nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil \1  nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [nil \1  nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [\1  nil nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]] '(0 0) \1)))))
+
