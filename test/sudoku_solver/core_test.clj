@@ -82,6 +82,26 @@
                                                 [nil \1  nil nil nil nil nil nil nil]
                                                 [nil nil nil nil nil nil nil nil nil]
                                                 [\1  nil nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]]))))
+
+  (testing "does not assign number 1 in the first quadrant when not possible"
+    (is (= [[nil nil nil nil nil \1  nil nil nil]
+            [nil nil nil nil nil nil nil nil nil]
+            [nil nil nil nil nil nil nil  nil nil]
+            [nil nil nil nil nil nil nil nil nil]
+            [nil nil nil nil nil nil nil nil nil]
+            [nil \1  nil nil nil nil nil nil nil]
+            [nil nil nil nil nil nil nil nil nil]
+            [\1  nil nil nil nil nil nil nil nil]
+            [nil nil nil nil nil nil nil nil nil]]
+           (assign-number-in-quadrant '(0 0) \1 [[nil nil nil nil nil \1  nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil  nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [nil \1  nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [\1  nil nil nil nil nil nil nil nil]
                                                 [nil nil nil nil nil nil nil nil nil]])))))
   (deftest lateral-sibling-quadrants-test
     (testing "lateral-sibling-quadrants"
