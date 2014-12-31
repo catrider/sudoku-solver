@@ -88,6 +88,7 @@
   (let [possible-coordinates-for-number
         (set/difference
            #{'(0 0) '(0 1) '(0 2) '(1 0) '(1 1) '(1 2) '(2 0) '(2 1) '(2 2)}
-           (sibling-eliminated-coordinates puzzle quadrant number))]
+           (sibling-eliminated-coordinates puzzle quadrant number)
+           (remove nil? (vals (get-quadrant puzzle quadrant))))]
     (if (= 1 (count possible-coordinates-for-number))
       (assign-at-coordinates puzzle quadrant(first possible-coordinates-for-number) number) puzzle)))
