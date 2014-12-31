@@ -79,14 +79,15 @@
                                (map (partial get-quadrant puzzle)
                                     (vertical-sibling-quadrants quadrant)))))))))
 
+(defn- assign-at-coordinates
+  [puzzle [qx qy :as quadrant] [cx cy :as coordinates] number]
+  (assoc puzzle (+ (* 3 qx) cx) (assoc (nth puzzle (+ (* 3 qx) cx)) (+ (* 3 qy) cy) number)))
+
 (defn assign-number-in-quadrant
-  [[x y :as coordinates] number puzzle]
+  [[x y :as quadrant] number puzzle]
   (let [possible-coordinates-for-number
         (set/difference
            #{'(0 0) '(0 1) '(0 2) '(1 0) '(1 1) '(1 2) '(2 0) '(2 1) '(2 2)}
-           (sibling-eliminated-coordinates puzzle coordinates number))]
+           (sibling-eliminated-coordinates puzzle quadrant number))]
     (if (= 1 (count possible-coordinates-for-number))
-      ((fn assign-at-coordinate
-       [[x y :as coords]]
-       (assoc puzzle x (assoc (nth puzzle x) y number))
-       ) (first possible-coordinates-for-number)) puzzle)))
+      (assign-at-coordinates puzzle quadrant(first possible-coordinates-for-number) number) puzzle)))
