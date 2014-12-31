@@ -122,6 +122,25 @@
                                                 [nil nil nil nil nil nil nil nil  nil]
                                                 [nil nil nil nil nil nil nil nil  \1]
                                                 [nil nil nil nil nil nil nil nil nil]]))))
+  (testing "assigns a number in a quadrant when it is the last number to be assigned in that quadrant"
+    (is (= [[nil nil nil nil nil nil nil nil nil]
+            [nil nil nil nil nil nil nil nil nil]
+            [nil nil nil nil nil nil nil nil nil]
+            [nil nil nil \6  \4 \8  nil nil nil]
+            [nil nil nil \1  \5  \3  nil nil nil]
+            [nil nil nil \7  \9  \2  nil nil nil]
+            [nil nil nil nil nil nil nil nil nil]
+            [nil nil nil nil nil nil nil nil nil]
+            [nil nil nil nil nil nil nil nil nil]]
+           (assign-number-in-quadrant '(1 1) \4 [[nil nil nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [nil nil nil \6  nil \8  nil nil nil]
+                                                [nil nil nil \1  \5  \3  nil nil nil]
+                                                [nil nil nil \7  \9  \2  nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]]))))
   (testing "assigns number 1 in the eighth quadrant"
     (is (= [[nil nil nil nil nil nil nil nil nil]
             [nil nil nil nil nil nil nil nil nil]
