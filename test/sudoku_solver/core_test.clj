@@ -121,7 +121,26 @@
                                                 [nil nil nil nil nil nil nil \1 nil]
                                                 [nil nil nil nil nil nil nil nil  nil]
                                                 [nil nil nil nil nil nil nil nil  \1]
-                                                [nil nil nil nil nil nil nil nil nil]])))))
+                                                [nil nil nil nil nil nil nil nil nil]]))))
+  (testing "assigns number 1 in the eighth quadrant"
+    (is (= [[nil nil nil nil nil nil nil nil nil]
+            [nil nil nil nil nil nil nil nil nil]
+            [nil nil nil nil nil \1  nil nil nil]
+            [nil nil nil \1  nil nil nil nil nil]
+            [nil nil nil nil nil nil nil nil nil]
+            [nil nil nil nil nil nil nil nil nil]
+            [nil nil nil nil \1  nil nil nil nil]
+            [nil \1  nil nil nil nil nil nil nil]
+            [nil nil nil nil nil nil \1  nil nil]]
+           (assign-number-in-quadrant '(2 1) \1 [[nil nil nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil \1  nil nil nil]
+                                                [nil nil nil \1  nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [nil \1  nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil \1  nil nil]])))))
   (deftest lateral-sibling-quadrants-test
     (testing "lateral-sibling-quadrants"
       (is (= #{'(0 1) '(0 2)} (lateral-sibling-quadrants '(0 0))))
