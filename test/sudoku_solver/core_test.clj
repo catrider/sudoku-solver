@@ -141,6 +141,25 @@
                                                 [nil nil nil nil nil nil nil nil nil]
                                                 [nil nil nil nil nil nil nil nil nil]
                                                 [nil nil nil nil nil nil nil nil nil]]))))
+  (testing "does not assign a number in a quadrant if it is already in the quadrant"
+    (is (= [[nil nil nil nil nil nil nil nil nil]
+            [nil nil nil nil nil nil nil nil nil]
+            [nil nil nil nil nil nil nil nil nil]
+            [nil nil nil \6  nil \8  nil nil nil]
+            [nil nil nil \1  \5  \3  nil nil nil]
+            [nil nil nil \7  \9  \2  nil nil nil]
+            [nil nil nil nil nil nil nil nil nil]
+            [nil nil nil nil nil nil nil nil nil]
+            [nil nil nil nil nil nil nil nil nil]]
+           (assign-number-in-quadrant '(1 1) \8 [[nil nil nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [nil nil nil \6  nil \8  nil nil nil]
+                                                [nil nil nil \1  \5  \3  nil nil nil]
+                                                [nil nil nil \7  \9  \2  nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]]))))
   (testing "assigns number 1 in the eighth quadrant"
     (is (= [[nil nil nil nil nil nil nil nil nil]
             [nil nil nil nil nil nil nil nil nil]
