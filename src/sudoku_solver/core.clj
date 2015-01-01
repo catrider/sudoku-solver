@@ -83,20 +83,28 @@
   [puzzle [qx qy :as quadrant] [cx cy :as coordinates] number]
   (assoc puzzle (+ (* 3 qx) cx) (assoc (nth puzzle (+ (* 3 qx) cx)) (+ (* 3 qy) cy) number)))
 
+(defn- numbers-in-row-of-quadrant-and-coordinates
+  [puzzle [qx qy :as quadrant] [cx cy :as coordinate]]
+  (set (nth puzzle (+ (* 3 qx) cx))))
+
+(defn- numbers-in-column-of-quadrant-and-coordinates
+  [puzzle [qx qy :as quadrant] [cx cy :as coordinate]]
+  (set
+   (map
+    (fn number-in-column
+      [row]
+      (nth row (+ (* 3 qy) cy)))
+    puzzle)))
+
 (defn number-at-coordinates-in-quadrant-completes-row?
   [puzzle [qx qy :as quadrant] [cx cy :as coordinates] number]
-  (let [numbers-in-row (set (assoc (nth puzzle (+ (* 3 qx) cx)) (+ (* 3 qy) cy) number))]
+  (let [numbers-in-row
+        (numbers-in-row-of-quadrant-and-coordinates (assign-at-coordinates puzzle quadrant coordinates number) quadrant coordinates)]
     (and (= 9 (count numbers-in-row)) (not (contains? numbers-in-row nil)))))
 
 (defn number-at-coordinates-in-quadrant-completes-column?
   [puzzle [qx qy :as quadrant] [cx cy :as coordinates] number]
-  (let [numbers-in-column
-        (set
-         (map
-          (fn number-in-column
-            [row]
-            (nth row (+ (* 3 qy) cy)))
-          (assign-at-coordinates puzzle quadrant coordinates number)))]
+  (let [numbers-in-column (numbers-in-column-of-quadrant-and-coordinates (assign-at-coordinates puzzle quadrant coordinates number) quadrant coordinates)]
     (and (= 9 (count numbers-in-column)) (not (contains? numbers-in-column nil)))))
 
 (defn assign-number-in-quadrant
