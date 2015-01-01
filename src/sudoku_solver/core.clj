@@ -114,7 +114,10 @@
             (filter
              (fn number-at-coordinate-completes-row-or-column
                [coordinates]
-               (or (number-at-coordinates-in-quadrant-completes-row? puzzle quadrant coordinates number) false)) possible-coordinates-for-number)]
+               (or
+                (number-at-coordinates-in-quadrant-completes-row? puzzle quadrant coordinates number)
+                (number-at-coordinates-in-quadrant-completes-column? puzzle quadrant coordinates number)))
+             possible-coordinates-for-number)]
         (if (= 1 (count coordinates-with-number-completes-row-or-column))
           (assign-at-coordinates puzzle quadrant (first coordinates-with-number-completes-row-or-column) number)
           puzzle))))))
