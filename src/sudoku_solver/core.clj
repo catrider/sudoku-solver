@@ -83,6 +83,11 @@
   [puzzle [qx qy :as quadrant] [cx cy :as coordinates] number]
   (assoc puzzle (+ (* 3 qx) cx) (assoc (nth puzzle (+ (* 3 qx) cx)) (+ (* 3 qy) cy) number)))
 
+(defn number-at-coordinates-in-quadrant-completes-row?
+  [puzzle [qx qy :as quadrant] [cx cy :as coordinates] number]
+  (let [numbers-in-row (set (assoc (nth puzzle (+ (* 3 qx) cx)) (+ (* 3 qy) cy) number))]
+    (and (= 9 (count numbers-in-row)) (not (contains? numbers-in-row nil)))))
+
 (defn assign-number-in-quadrant
   [[x y :as quadrant] number puzzle]
   (if (not (nil? (get (get-quadrant puzzle quadrant) number)))
@@ -93,4 +98,5 @@
            (sibling-eliminated-coordinates puzzle quadrant number)
            (remove nil? (vals (get-quadrant puzzle quadrant))))]
     (if (= 1 (count possible-coordinates-for-number))
-      (assign-at-coordinates puzzle quadrant(first possible-coordinates-for-number) number) puzzle))))
+      (assign-at-coordinates puzzle quadrant(first possible-coordinates-for-number) number)
+      puzzle))))

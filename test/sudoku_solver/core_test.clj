@@ -224,3 +224,15 @@
                                                 [\1  nil nil nil nil nil nil nil nil]
                                                 [nil nil nil nil nil nil nil nil nil]] '(0 0) \1)))))
 
+  (deftest number-at-coordinates-in-quadrant-completes-row?-test
+    (testing "number-at-coordinates-in-quadrant-completes-row? returns true when the number completes the row"
+      (is (= true (number-at-coordinates-in-quadrant-completes-row? [[nil nil nil nil nil nil nil nil nil]
+                                                                               [nil nil nil nil nil nil nil nil nil]
+                                                                               [nil nil nil nil nil nil nil nil nil]
+                                                                               [nil nil nil nil nil nil nil nil nil]
+                                                                               [nil nil nil nil nil nil nil nil nil]
+                                                                               [nil nil nil nil nil nil nil nil nil]
+                                                                               [nil nil nil nil nil nil nil nil nil]
+                                                                               [\6  \3  \8  \1  \7  \2  \9  nil \5]
+                                                                               [nil nil nil nil nil nil nil nil nil]] '(2 2) '(1 1) \4)))))
+
