@@ -98,5 +98,12 @@
            (sibling-eliminated-coordinates puzzle quadrant number)
            (remove nil? (vals (get-quadrant puzzle quadrant))))]
     (if (= 1 (count possible-coordinates-for-number))
-      (assign-at-coordinates puzzle quadrant(first possible-coordinates-for-number) number)
-      puzzle))))
+      (assign-at-coordinates puzzle quadrant (first possible-coordinates-for-number) number)
+      (let [coordinates-with-number-completes-row-or-column
+            (filter
+             (fn number-at-coordinate-completes-row-or-column
+               [coordinates]
+               (or (number-at-coordinates-in-quadrant-completes-row? puzzle quadrant coordinates number) false)) possible-coordinates-for-number)]
+        (if (= 1 (count coordinates-with-number-completes-row-or-column))
+          (assign-at-coordinates puzzle quadrant (first coordinates-with-number-completes-row-or-column) number)
+          puzzle))))))
