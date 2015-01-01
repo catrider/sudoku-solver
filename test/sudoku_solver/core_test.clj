@@ -256,4 +256,38 @@
                                                                                [nil nil nil nil nil nil nil nil nil]
                                                                                [\6  \3  \8  \1  \7  \2  \9  nil \5]
                                                                                [nil nil nil nil nil nil nil nil nil]] '(2 2) '(1 1) \4)))))
+  (deftest number-at-coordinates-in-quadrant-completes-row?-test
+    (testing "number-at-coordinates-in-quadrant-completes-row? returns false when the number does not complete the row"
+      (is (= false (number-at-coordinates-in-quadrant-completes-row? [[nil nil nil nil nil nil nil nil nil]
+                                                                     [nil nil nil nil nil nil nil nil nil]
+                                                                     [nil nil nil nil nil nil nil nil nil]
+                                                                     [nil nil nil nil nil nil nil nil nil]
+                                                                     [nil nil nil nil nil nil nil nil nil]
+                                                                     [nil nil nil nil nil nil nil nil nil]
+                                                                     [nil nil nil nil nil nil nil nil nil]
+                                                                     [\6  nil  \8  \1  \7  \2  \9  nil \5]
+                                                                     [nil nil nil nil nil nil nil nil nil]] '(2 2) '(1 1) \4)))))
+
+  (deftest number-at-coordinates-in-quadrant-completes-column?-test
+    (testing "number-at-coordinates-in-quadrant-completes-column? returns true when the number completes the column"
+      (is (= true (number-at-coordinates-in-quadrant-completes-column? [[nil nil \5  nil nil nil nil nil nil]
+                                                                        [nil nil \8  nil nil nil nil nil nil]
+                                                                        [nil nil \1  nil nil nil nil nil nil]
+                                                                        [nil nil \7  nil nil nil nil nil nil]
+                                                                        [nil nil nil nil nil nil nil nil nil]
+                                                                        [nil nil \3  nil nil nil nil nil nil]
+                                                                        [nil nil \9  nil nil nil nil nil nil]
+                                                                        [nil nil \4  nil nil nil nil nil nil]
+                                                                        [nil nil \6  nil nil nil nil nil nil]] '(1 0) '(1 2) \2))))
+
+    (testing "number-at-coordinates-in-quadrant-completes-column? returns false when the number does not complete the column"
+      (is (= false (number-at-coordinates-in-quadrant-completes-column? [[nil nil \5  nil nil nil nil nil nil]
+                                                                         [nil nil \8  nil nil nil nil nil nil]
+                                                                         [nil nil \1  nil nil nil nil nil nil]
+                                                                         [nil nil \7  nil nil nil nil nil nil]
+                                                                         [nil nil nil nil nil nil nil nil nil]
+                                                                         [nil nil \3  nil nil nil nil nil nil]
+                                                                         [nil nil \9  nil nil nil nil nil nil]
+                                                                         [nil nil \4  nil nil nil nil nil nil]
+                                                                         [nil nil nil nil nil nil nil nil nil]] '(2 2) '(1 1) \4)))))
 

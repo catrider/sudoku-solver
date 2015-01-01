@@ -88,6 +88,10 @@
   (let [numbers-in-row (set (assoc (nth puzzle (+ (* 3 qx) cx)) (+ (* 3 qy) cy) number))]
     (and (= 9 (count numbers-in-row)) (not (contains? numbers-in-row nil)))))
 
+(defn number-at-coordinates-in-quadrant-completes-column?
+  [puzzle [qx qy :as quadrant] [cx cy :as coordinates] number]
+  ())
+
 (defn assign-number-in-quadrant
   [[x y :as quadrant] number puzzle]
   (if (not (nil? (get (get-quadrant puzzle quadrant) number)))
