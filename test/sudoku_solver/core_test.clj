@@ -198,7 +198,28 @@
                                                 [nil nil nil nil nil nil nil nil nil]
                                                 [nil nil nil nil nil nil nil nil nil]
                                                 [nil nil nil nil nil nil nil nil nil]
-                                                [nil nil nil nil nil nil nil nil nil]])))))
+                                                [nil nil nil nil nil nil nil nil nil]]))))
+
+  (testing "assigns number 1 in the second quadrant when the 1 completes the column"
+    (is (= [[nil nil nil nil \7  nil nil nil nil]
+            [nil nil nil nil \1  nil nil nil nil]
+            [nil nil nil nil \5  nil nil nil nil]
+            [nil nil nil nil \2  nil nil nil nil]
+            [nil nil nil nil \8  nil nil nil nil]
+            [nil nil nil nil \9  nil nil nil nil]
+            [nil nil nil nil \6  nil nil nil nil]
+            [nil nil nil nil \4  nil nil nil nil]
+            [nil nil nil nil \3  nil nil nil nil]]
+           (assign-number-in-quadrant '(0 1) \1 [[nil nil nil nil \7  nil nil nil nil]
+                                                 [nil nil nil nil nil nil nil nil nil]
+                                                 [nil nil nil nil \5  nil nil nil nil]
+                                                 [nil nil nil nil \2  nil nil nil nil]
+                                                 [nil nil nil nil \8  nil nil nil nil]
+                                                 [nil nil nil nil \9  nil nil nil nil]
+                                                 [nil nil nil nil \6  nil nil nil nil]
+                                                 [nil nil nil nil \4  nil nil nil nil]
+                                                 [nil nil nil nil \3  nil nil nil nil]])))))
+
   (deftest lateral-sibling-quadrants-test
     (testing "lateral-sibling-quadrants"
       (is (= #{'(0 1) '(0 2)} (lateral-sibling-quadrants '(0 0))))
