@@ -90,7 +90,14 @@
 
 (defn number-at-coordinates-in-quadrant-completes-column?
   [puzzle [qx qy :as quadrant] [cx cy :as coordinates] number]
-  ())
+  (let [numbers-in-column
+        (set
+         (map
+          (fn number-in-column
+            [row]
+            (nth row (+ (* 3 qy) cy)))
+          (assign-at-coordinates puzzle quadrant coordinates number)))]
+    (and (= 9 (count numbers-in-column)) (not (contains? numbers-in-column nil)))))
 
 (defn assign-number-in-quadrant
   [[x y :as quadrant] number puzzle]
