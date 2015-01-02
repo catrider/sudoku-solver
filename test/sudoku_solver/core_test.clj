@@ -255,8 +255,7 @@
                                                                                [nil nil nil nil nil nil nil nil nil]
                                                                                [nil nil nil nil nil nil nil nil nil]
                                                                                [\6  \3  \8  \1  \7  \2  \9  nil \5]
-                                                                               [nil nil nil nil nil nil nil nil nil]] '(2 2) '(1 1) \4)))))
-  (deftest number-at-coordinates-in-quadrant-completes-row?-test
+                                                                               [nil nil nil nil nil nil nil nil nil]] '(2 2) '(1 1) \4))))
     (testing "number-at-coordinates-in-quadrant-completes-row? returns false when the number does not complete the row"
       (is (= false (number-at-coordinates-in-quadrant-completes-row? [[nil nil nil nil nil nil nil nil nil]
                                                                      [nil nil nil nil nil nil nil nil nil]
