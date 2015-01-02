@@ -96,16 +96,20 @@
       (nth row (+ (* 3 qy) cy)))
     puzzle)))
 
+(defn- line-is-complete?
+  [numbers-in-row]
+  (and (= 9 (count numbers-in-row)) (not (contains? numbers-in-row nil))))
+
 (defn number-at-coordinates-in-quadrant-completes-row?
   [puzzle [qx qy :as quadrant] [cx cy :as coordinates] number]
   (let [numbers-in-row
         (numbers-in-row-of-quadrant-and-coordinates (assign-at-coordinates puzzle quadrant coordinates number) quadrant coordinates)]
-    (and (= 9 (count numbers-in-row)) (not (contains? numbers-in-row nil)))))
+    (line-is-complete? numbers-in-row)))
 
 (defn number-at-coordinates-in-quadrant-completes-column?
   [puzzle [qx qy :as quadrant] [cx cy :as coordinates] number]
   (let [numbers-in-column (numbers-in-column-of-quadrant-and-coordinates (assign-at-coordinates puzzle quadrant coordinates number) quadrant coordinates)]
-    (and (= 9 (count numbers-in-column)) (not (contains? numbers-in-column nil)))))
+    (line-is-complete? numbers-in-column)))
 
 (defn assign-number-in-quadrant
   [[x y :as quadrant] number puzzle]
