@@ -138,25 +138,53 @@
   (let [numbers-in-column (numbers-in-column-of-quadrant-and-coordinates (assign-at-coordinates puzzle quadrant coordinates number) quadrant coordinates)]
     (line-is-complete? numbers-in-column)))
 
+(defn- possible-coordinates-for-number-in-quadrant
+  [puzzle [qx qy :as quadrant] number]
+  (set/difference
+   #{'(0 0) '(0 1) '(0 2) '(1 0) '(1 1) '(1 2) '(2 0) '(2 1) '(2 2)}
+   (sibling-eliminated-coordinates puzzle quadrant number)
+   (set (remove nil? (vals (get-quadrant puzzle quadrant))))))
+
+(defn- row
+  [[x y :as coordinates]]
+  (identity x))
+
+(defn- column
+  [[x y :as coordinates]]
+  (identity y))
+
 (defn assign-number-in-quadrant
   [[x y :as quadrant] number puzzle]
   (if (not (nil? (get (get-quadrant puzzle quadrant) number)))
     puzzle
     (let [possible-coordinates-for-number
-        (set/difference
-           #{'(0 0) '(0 1) '(0 2) '(1 0) '(1 1) '(1 2) '(2 0) '(2 1) '(2 2)}
-           (sibling-eliminated-coordinates puzzle quadrant number)
-           (set (remove nil? (vals (get-quadrant puzzle quadrant)))))]
-    (if (= 1 (count possible-coordinates-for-number))
-      (assign-at-coordinates puzzle quadrant (first possible-coordinates-for-number) number)
-      (let [coordinates-with-number-completes-row-or-column
-            (filter
-             (fn number-at-coordinate-completes-row-or-column
-               [coordinates]
-               (or
-                (number-at-coordinates-in-quadrant-completes-row? puzzle quadrant coordinates number)
-                (number-at-coordinates-in-quadrant-completes-column? puzzle quadrant coordinates number)))
-             possible-coordinates-for-number)]
-        (if (= 1 (count coordinates-with-number-completes-row-or-column))
-          (assign-at-coordinates puzzle quadrant (first coordinates-with-number-completes-row-or-column) number)
-          puzzle))))))
+          (possible-coordinates-for-number-in-quadrant puzzle quadrant number)]
+      (if (= 1 (count possible-coordinates-for-number))
+        (assign-at-coordinates puzzle quadrant (first possible-coordinates-for-number) number)
+        (let [pc (let [vertical-sibling-quadrants
+                       (vertical-sibling-quadrants quadrant)]
+                   (set/difference
+                    (set (map column possible-coordinates-for-number))
+                    (set (map column (possible-coordinates-for-number-in-quadrant puzzle (first vertical-sibling-quadrants) number)))
+                    (set (map column (possible-coordinates-for-number-in-quadrant puzzle (last vertical-sibling-quadrants) number)))))
+              pr (let [lateral-sibling-quadrants
+                       (lateral-sibling-quadrants quadrant)]
+                   (set/difference
+                    (set (map row possible-coordinates-for-number))
+                    (set (map row (possible-coordinates-for-number-in-quadrant puzzle (first lateral-sibling-quadrants) number)))
+                    (set (map row (possible-coordinates-for-number-in-quadrant puzzle (last lateral-sibling-quadrants) number)))))]
+          (if (and
+               (= 1 (count pc))
+               (= 1 (count pr)))
+            (assign-at-coordinates puzzle quadrant (list (first pr) (first pc)) number)
+            (let [coordinates-with-number-completes-row-or-column
+                  (filter
+                   (fn number-at-coordinate-completes-row-or-column
+                     [coordinates]
+                     (or
+                      (number-at-coordinates-in-quadrant-completes-row? puzzle quadrant coordinates number)
+                      (number-at-coordinates-in-quadrant-completes-column? puzzle quadrant coordinates number)))
+                   possible-coordinates-for-number)]
+              (if (= 1 (count coordinates-with-number-completes-row-or-column))
+                (assign-at-coordinates puzzle quadrant (first coordinates-with-number-completes-row-or-column) number)
+                puzzle))))))))

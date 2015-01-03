@@ -238,7 +238,7 @@
             [nil \8  nil nil \3  nil \9  nil \6]
             [\1  \3  \9  nil nil \8  \4  \6  \2]
             [nil nil nil \6  \2  \3  \8  \1  \9]
-            [\8  \6  \2  nil nil nil \7  \3  \5]
+            [\8  \6  \2  nil \9  nil \7  \3  \5]
             [\6  nil \3  nil \8  nil nil \7  nil]
             [\9  \7  \8  nil \6  nil nil nil \3]
             [nil \5  nil \3  nil nil \6  \9  \8]]
@@ -247,7 +247,7 @@
                                                  [nil \8  nil nil \3  nil \9  nil \6]
                                                  [\1  \3  \9  nil nil \8  \4  \6  \2]
                                                  [nil nil nil \6  \2  \3  \8  \1  \9]
-                                                 [\8  \6  \2  nil \9  nil \7  \3  \5]
+                                                 [\8  \6  \2  nil nil nil \7  \3  \5]
                                                  [\6  nil \3  nil \8  nil nil \7  nil]
                                                  [\9  \7  \8  nil \6  nil nil nil \3]
                                                  [nil \5  nil \3  nil nil \6  \9  \8]])))))
