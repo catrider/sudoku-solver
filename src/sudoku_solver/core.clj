@@ -42,7 +42,9 @@
                   (list (list x y) number)))]
     (if (is-puzzle-complete? mutated-puzzle)
       mutated-puzzle
-      (solve-puzzle mutated-puzzle))))
+      (if (= mutated-puzzle puzzle)
+        (throw (Exception. (str "Could not solve puzzle. Got this far:\n" puzzle)))
+        (solve-puzzle mutated-puzzle)))))
 
 (defn- coordinates-from-index
   "Converts an index to coordiantes, assuming the quadrant dimension is 3"

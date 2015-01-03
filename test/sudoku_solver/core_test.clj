@@ -322,5 +322,16 @@
               [nil nil \6  \7  \2  \1  nil nil \5 ]
               [nil \3  nil \2  \1  \9  nil nil \7 ]
               [nil \8  \2  nil \4  nil nil nil nil]
-              [\1  \7  nil nil nil nil \4  nil nil]])))))
+              [\1  \7  nil nil nil nil \4  nil nil]]))))
+    (testing "solve-puzzle throws an exception if it is unable to solve the puzzle"
+      (is (thrown? Exception
+                   (solve-puzzle [[nil nil nil nil nil nil nil nil nil]
+                                  [\5  nil nil nil nil nil nil nil nil]
+                                  [\2  nil nil nil nil nil nil nil nil]
+                                  [nil \7  \2  nil nil nil nil nil nil]
+                                  [\4  \6  \5  nil nil nil nil nil nil]
+                                  [\8  \1  \9  nil nil nil nil nil nil]
+                                  [nil \5  \8  nil nil nil nil nil nil]
+                                  [\1  \4  \3  nil nil nil nil nil nil]
+                                  [\7  \2  \6  nil nil nil nil nil nil]])))))
 
