@@ -3,7 +3,7 @@
             [sudoku-solver.core :refer :all]))
 
 (deftest parse-puzzle-file-test
-  (testing "parse-puzzle-file"
+  (testing "parse-easy-puzzle-file"
     (is (=
          [[nil nil \8 nil nil nil nil \3 \1]
           [nil nil nil nil \6 nil \2 \7 nil]
@@ -14,7 +14,19 @@
           [nil \3 nil \2 \1 \9 nil nil \7]
           [nil \8 \2 nil \4 nil nil nil nil]
           [\1 \7 nil nil nil nil \4 nil nil]]
-         (parse-puzzle-file "resources/easy")))))
+         (parse-puzzle-file "resources/easy"))))
+  (testing "parse-medium-puzzle-file"
+    (is (=
+         [[nil \9  nil nil nil \6  nil \5  nil]
+          [nil nil nil nil \1  nil \3  \8  nil]
+          [nil \8  nil nil \3  nil nil nil \6 ]
+          [\1  \3  \9  nil nil nil \4  \6  nil ]
+          [nil nil nil \6  nil \3  nil nil nil]
+          [nil \6  \2  nil nil nil \7  \3  \5 ]
+          [\6  nil nil nil \8  nil nil \7  nil]
+          [nil \7  \8  nil \6  nil nil nil nil]
+          [nil \5  nil \3  nil nil nil \9  nil]]
+         (parse-puzzle-file "resources/medium")))))
 
 (deftest get-quadrant-test
   (testing "get-quadrant in first quadrant"
