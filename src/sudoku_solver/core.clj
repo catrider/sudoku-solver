@@ -18,10 +18,31 @@
                 (map #(seq %)
                    (str/split (slurp filepath) #"\n")))))))))
 
+(defn is-puzzle-complete?
+  [puzzle]
+  (not (reduce #(or %1 %2) (map nil? (flatten puzzle)))))
+
+(declare assign-number-in-quadrant)
+
+(defn- int-to-char
+  [i]
+  (char (+ 48 i)))
+
 (defn solve-puzzle
   "Solves the puzzle"
   [puzzle]
-  ())
+  (let [mutated-puzzle
+        (reduce (fn mutated-puzzle
+                  [p args]
+                  (assign-number-in-quadrant (first args) (last args) p))
+                puzzle
+                (for [x (range 3)
+                      y (range 3)
+                      number (map int-to-char (range 1 10))]
+                  (list (list x y) number)))]
+    (if (is-puzzle-complete? mutated-puzzle)
+      mutated-puzzle
+      (solve-puzzle mutated-puzzle))))
 
 (defn- coordinates-from-index
   "Converts an index to coordiantes, assuming the quadrant dimension is 3"
@@ -79,9 +100,13 @@
                                (map (partial get-quadrant puzzle)
                                     (vertical-sibling-quadrants quadrant)))))))))
 
+(defn- index-for-coordinates-in-quadrant
+  [qi ci]
+  (+ (* 3 qi) ci))
+
 (defn- assign-at-coordinates
   [puzzle [qx qy :as quadrant] [cx cy :as coordinates] number]
-  (assoc puzzle (+ (* 3 qx) cx) (assoc (nth puzzle (+ (* 3 qx) cx)) (+ (* 3 qy) cy) number)))
+  (assoc puzzle (index-for-coordinates-in-quadrant qx cx) (assoc (nth puzzle (index-for-coordinates-in-quadrant qx cx)) (index-for-coordinates-in-quadrant qy cy) number)))
 
 (defn- numbers-in-row-of-quadrant-and-coordinates
   [puzzle [qx qy :as quadrant] [cx cy :as coordinate]]
@@ -93,12 +118,12 @@
    (map
     (fn number-in-column
       [row]
-      (nth row (+ (* 3 qy) cy)))
+      (nth row (index-for-coordinates-in-quadrant qy cy)))
     puzzle)))
 
 (defn- line-is-complete?
   [numbers-in-row]
-  (and (= 9 (count numbers-in-row)) (not (contains? numbers-in-row nil))))
+  (and (= 9 (count numbers-in-row)) (not (reduce #(or %1 %2) (map nil? numbers-in-row)))))
 
 (defn number-at-coordinates-in-quadrant-completes-row?
   [puzzle [qx qy :as quadrant] [cx cy :as coordinates] number]
@@ -119,7 +144,7 @@
         (set/difference
            #{'(0 0) '(0 1) '(0 2) '(1 0) '(1 1) '(1 2) '(2 0) '(2 1) '(2 2)}
            (sibling-eliminated-coordinates puzzle quadrant number)
-           (remove nil? (vals (get-quadrant puzzle quadrant))))]
+           (set (remove nil? (vals (get-quadrant puzzle quadrant)))))]
     (if (= 1 (count possible-coordinates-for-number))
       (assign-at-coordinates puzzle quadrant (first possible-coordinates-for-number) number)
       (let [coordinates-with-number-completes-row-or-column

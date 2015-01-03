@@ -290,3 +290,25 @@
                                                                          [nil nil \4  nil nil nil nil nil nil]
                                                                          [nil nil nil nil nil nil nil nil nil]] '(2 2) '(1 1) \4)))))
 
+  (deftest solve-puzzle-test
+    (testing "solve-puzzle solves the easy puzzle"
+      (is (= [[\2  \6  \8  \4  \7  \5  \9  \3  \1]
+              [\4  \5  \1  \9  \6  \3  \2  \7  \8]
+              [\7  \9  \3  \1  \8  \2  \5  \6  \4]
+              [\9  \2  \7  \5  \3  \4  \1  \8  \6]
+              [\3  \1  \5  \6  \9  \8  \7  \4  \2]
+              [\8  \4  \6  \7  \2  \1  \3  \9  \5]
+              [\6  \3  \4  \2  \1  \9  \8  \5  \7]
+              [\5  \8  \2  \3  \4  \7  \6  \1  \9]
+              [\1  \7  \9  \8  \5  \6  \4  \2  \3]]
+
+(solve-puzzle [[nil nil \8  nil nil nil nil \3  \1]
+              [nil nil nil nil \6  nil \2  \7  nil]
+              [\7  nil nil \1  \8  \2  nil \6  nil]
+              [\9  nil nil \5  \3  \4  \1  nil nil]
+              [nil nil \5  \6  nil \8  \7  nil nil]
+              [nil nil \6  \7  \2  \1  nil nil \5 ]
+              [nil \3  nil \2  \1  \9  nil nil \7 ]
+              [nil \8  \2  nil \4  nil nil nil nil]
+              [\1  \7  nil nil nil nil \4  nil nil]])))))
+
