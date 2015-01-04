@@ -2,11 +2,6 @@
 (require '[clojure.string :as str])
 (require '[clojure.set :as set])
 
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
-
 (defn parse-puzzle-file
   "Generate a list of lists from the sudoku puzzle file"
   [filepath]
@@ -86,21 +81,21 @@
   (set
    (set/union
     (reduce (fn accumulate [val a] (apply (partial conj val) a)) #{}
-    (map (fn eliminated-coordinates-based-on-vertical-sibling-coordinates
-                    [[x y :as coordinates]]
-                    (list (list x 0) (list x 1) (list x 2)))
-                  (remove nil?
-                          (map (fn coordinates-of-number-in-quadrant [quadrant-map] (get quadrant-map number))
-                               (map (partial get-quadrant puzzle)
-                                    (lateral-sibling-quadrants quadrant))))))
+            (map (fn eliminated-coordinates-based-on-vertical-sibling-coordinates
+                   [[x y :as coordinates]]
+                   (list (list x 0) (list x 1) (list x 2)))
+                 (remove nil?
+                         (map (fn coordinates-of-number-in-quadrant [quadrant-map] (get quadrant-map number))
+                              (map (partial get-quadrant puzzle)
+                                   (lateral-sibling-quadrants quadrant))))))
     (reduce (fn accumulate [val a] (apply (partial conj val) a)) #{}
             (map (fn eliminated-coordinates-based-on-lateral-sibling-coordinates
-                    [[x y :as coordinates]]
-                    (list (list 0 y) (list 1 y) (list 2 y)))
-                  (remove nil?
-                          (map (fn coordinates-of-number-in-quadrant [quadrant-map] (get quadrant-map number))
-                               (map (partial get-quadrant puzzle)
-                                    (vertical-sibling-quadrants quadrant)))))))))
+                   [[x y :as coordinates]]
+                   (list (list 0 y) (list 1 y) (list 2 y)))
+                 (remove nil?
+                         (map (fn coordinates-of-number-in-quadrant [quadrant-map] (get quadrant-map number))
+                              (map (partial get-quadrant puzzle)
+                                   (vertical-sibling-quadrants quadrant)))))))))
 
 (defn- index-for-coordinates-in-quadrant
   [qi ci]
@@ -154,54 +149,33 @@
   [coordinates]
   (set (map column coordinates)))
 
+(defn quadrant-contains-number?
+  [puzzle quadrant number]
+  (not (nil? (get (get-quadrant puzzle quadrant) number))))
+
+(defn reserved-coordinates
+  [coordinate_sets vertical?]
+  (set nil))
+
 (defn- possible-coordinates-for-number-in-quadrant
   ([puzzle [qx qy :as quadrant] number]
    (possible-coordinates-for-number-in-quadrant puzzle quadrant number 1))
-  ([puzzle [qx qy :as quadrant] number deepness]
+  ([puzzle [qx qy :as quadrant] number depth]
    (let [ipc
          (set/difference
           #{'(0 0) '(0 1) '(0 2) '(1 0) '(1 1) '(1 2) '(2 0) '(2 1) '(2 2)}
           (sibling-eliminated-coordinates puzzle quadrant number)
           (set (remove nil? (vals (get-quadrant puzzle quadrant)))))]
-     (if (and (< deepness 2) (> (count ipc) 1))
-       (let [taken-columns (let [vertical-sibling-quadrants
-                      (vertical-sibling-quadrants quadrant)]
-                  (filter
-                   #(let [sc1
-                          (disj (columns (possible-coordinates-for-number-in-quadrant puzzle (first vertical-sibling-quadrants) number (inc deepness))) %)
-                          sc2
-                          (disj (columns (possible-coordinates-for-number-in-quadrant puzzle (last vertical-sibling-quadrants) number (inc deepness))) %)]
-                      (and (= 1 (count sc1) (count sc2)) (= (first sc1) (first sc2))))
-                   (columns ipc)))
-             taken-rows (let [lateral-sibling-quadrants
-                      (lateral-sibling-quadrants quadrant)]
-                  (filter
-                   #(let [sr1
-                          (disj
-                           (rows (possible-coordinates-for-number-in-quadrant puzzle (first lateral-sibling-quadrants) number (inc deepness))) %)
-                          sr2
-                          (disj
-                           (rows (possible-coordinates-for-number-in-quadrant puzzle (last lateral-sibling-quadrants) number (inc deepness))) %)]
-                      (and (= 1 (count sr1) (count sr2)) (= (first sr1) (first sr2))))
-                   (rows ipc)))]
-           (set/difference
-            ipc
-            (set
-             (concat
-              (reduce
-               #(concat %1 (list (list %2 0) (list %2 1) (list %2 2)))
-               '()
-               taken-rows)
-              (reduce
-               #(concat %1 (list (list 0 %2) (list 1 %2) (list 2 %2)))
-               '()
-               taken-columns)
-              ))))
+     (if (< depth 3)
+       (set/difference
+        ipc
+        (reserved-coordinates (mapcat (fn [q] (possible-coordinates-for-number-in-quadrant puzzle q number (inc depth))) (filter #(not (quadrant-contains-number? puzzle % number)) (vertical-sibling-quadrants quadrant))) true)
+        (reserved-coordinates (mapcat (fn [q] (possible-coordinates-for-number-in-quadrant puzzle q number (inc depth))) (filter #(not (quadrant-contains-number? puzzle % number)) (lateral-sibling-quadrants quadrant))) false))
        ipc))))
 
 (defn assign-number-in-quadrant
   [[x y :as quadrant] number puzzle]
-  (if (not (nil? (get (get-quadrant puzzle quadrant) number)))
+  (if (quadrant-contains-number? puzzle quadrant number)
     puzzle
     (let [possible-coordinates-for-number
           (possible-coordinates-for-number-in-quadrant puzzle quadrant number)]
