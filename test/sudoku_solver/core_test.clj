@@ -250,6 +250,26 @@
                                                  [\8  \6  \2  nil nil nil \7  \3  \5]
                                                  [\6  nil \3  nil \8  nil nil \7  nil]
                                                  [\9  \7  \8  nil \6  nil nil nil \3]
+                                                 [nil \5  nil \3  nil nil \6  \9  \8]]))))
+
+  (testing "assigns number 2 in the third quadrant by realizing any other assignment would prevent assignment in the second and eighth quadrant"
+    (is (= [[\3  \9  nil \8  nil \6  \2  \5  nil]
+            [nil nil \6  nil \1  nil \3  \8  nil]
+            [nil \8  nil nil \3  nil \9  nil \6]
+            [\1  \3  \9  \7  \5  \8  \4  \6  \2]
+            [nil nil nil \6  \2  \3  \8  \1  \9]
+            [\8  \6  \2  nil \9  nil \7  \3  \5]
+            [\6  nil \3  nil \8  nil nil \7  nil]
+            [\9  \7  \8  nil \6  nil nil nil \3]
+            [nil \5  nil \3  nil nil \6  \9  \8]]
+           (assign-number-in-quadrant '(0 2) \2 [[\3  \9  nil \8  nil \6  nil \5  nil]
+                                                 [nil nil \6  nil \1  nil \3  \8  nil]
+                                                 [nil \8  nil nil \3  nil \9  nil \6]
+                                                 [\1  \3  \9  \7  \5  \8  \4  \6  \2]
+                                                 [nil nil nil \6  \2  \3  \8  \1  \9]
+                                                 [\8  \6  \2  nil \9  nil \7  \3  \5]
+                                                 [\6  nil \3  nil \8  nil nil \7  nil]
+                                                 [\9  \7  \8  nil \6  nil nil nil \3]
                                                  [nil \5  nil \3  nil nil \6  \9  \8]])))))
 
   (deftest lateral-sibling-quadrants-test
