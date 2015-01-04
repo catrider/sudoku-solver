@@ -154,8 +154,37 @@
   (not (nil? (get (get-quadrant puzzle quadrant) number))))
 
 (defn reserved-coordinates
-  [coordinate_sets vertical?]
-  (set nil))
+  [coordinate-sets vertical?]
+  (do (println coordinate-sets vertical?)
+  (if (identity vertical?)
+    (loop [possible-columns (group-by count (map columns coordinate-sets))
+           reserved-columns #{}
+           c 1]
+      (if (> c 2)
+        (set (mapcat #(list '(0 %) '(1 %) '(2 %)) reserved-columns))
+        (let [new-reserved-columns (filter
+                                    (fn [x]
+                                      (or
+                                       (= 1 (count x))
+                                       (= 2 ((frequencies (possible-columns c)) x))))
+                                      (possible-columns c))]
+          (recur (group-by count (map columns (filter #(not (contains? (apply set/union new-reserved-columns) (column %))) coordinate-sets)))
+                 ((partial apply set/union reserved-columns) new-reserved-columns)
+                 (inc c)))))
+    (loop [possible-rows (group-by count (map rows coordinate-sets))
+           reserved-rows #{}
+           c 1]
+      (if (> c 2)
+        (set (mapcat #(list '(% 0) '(% 1) '(% 2)) reserved-rows))
+        (let [new-reserved-rows (filter
+                                    (fn [x]
+                                      (or
+                                       (= 1 (count x))
+                                       (= 2 ((frequencies (possible-rows c)) x))))
+                                      (possible-rows c))]
+          (recur (group-by count (map rows (filter #(not (contains? (apply set/union new-reserved-rows) (column %))) coordinate-sets)))
+                 ((partial apply set/union reserved-rows) new-reserved-rows)
+                 (inc c))))))))
 
 (defn- possible-coordinates-for-number-in-quadrant
   ([puzzle [qx qy :as quadrant] number]
@@ -169,8 +198,20 @@
      (if (< depth 3)
        (set/difference
         ipc
-        (reserved-coordinates (mapcat (fn [q] (possible-coordinates-for-number-in-quadrant puzzle q number (inc depth))) (filter #(not (quadrant-contains-number? puzzle % number)) (vertical-sibling-quadrants quadrant))) true)
-        (reserved-coordinates (mapcat (fn [q] (possible-coordinates-for-number-in-quadrant puzzle q number (inc depth))) (filter #(not (quadrant-contains-number? puzzle % number)) (lateral-sibling-quadrants quadrant))) false))
+        (reserved-coordinates
+         (reduce
+          (fn [coll q]
+            (conj coll (possible-coordinates-for-number-in-quadrant puzzle q number (inc depth))))
+          '()
+          (filter #(not (quadrant-contains-number? puzzle % number)) (vertical-sibling-quadrants quadrant)))
+         true)
+        (reserved-coordinates
+         (reduce
+          (fn [coll q]
+            (conj coll (possible-coordinates-for-number-in-quadrant puzzle q number (inc depth))))
+          '()
+          (filter #(not (quadrant-contains-number? puzzle % number)) (lateral-sibling-quadrants quadrant)))
+         false))
        ipc))))
 
 (defn assign-number-in-quadrant
