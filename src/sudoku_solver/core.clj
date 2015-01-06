@@ -41,6 +41,11 @@
         (throw (Exception. (str "Could not solve puzzle. Got this far:\n" puzzle)))
         (solve-puzzle mutated-puzzle)))))
 
+(defn display-puzzle
+  "Displays a puzzle"
+  [puzzle]
+  ())
+
 (defn- coordinates-from-index
   "Converts an index to coordiantes, assuming the quadrant dimension is 3"
   [index]
