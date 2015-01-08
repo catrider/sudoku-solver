@@ -23,6 +23,8 @@
   [i]
   (char (+ 48 i)))
 
+(declare display-puzzle)
+
 (defn solve-puzzle
   "Solves the puzzle"
   [puzzle]
@@ -38,7 +40,7 @@
     (if (is-puzzle-complete? mutated-puzzle)
       mutated-puzzle
       (if (= mutated-puzzle puzzle)
-        (throw (Exception. (str "Could not solve puzzle. Got this far:\n" puzzle)))
+        (throw (Exception. (str "Could not solve puzzle. Got this far:\n" (display-puzzle puzzle))))
         (solve-puzzle mutated-puzzle)))))
 
 (defn display-puzzle-row
@@ -53,7 +55,7 @@
        (flatten
         (interpose
          \|
-         (partition 3 numbers-row)))
+         (partition 3 (replace {nil \space} numbers-row))))
        [\| \|]))))))
 
 (defn display-puzzle
