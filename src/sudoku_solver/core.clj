@@ -72,6 +72,10 @@
                puzzle)))
             (repeat 2 [\| \space \- \space \- \space \- \space \- \space \- \space \- \space \- \space \- \space \- \space \- \space \- \space \| \newline]))))))
 
+(defn main
+  [args]
+  (println (display-puzzle (solve-puzzle (parse-puzzle-file args)))))
+
 (defn- coordinates-from-index
   "Converts an index to coordiantes, assuming the quadrant dimension is 3"
   [index]
