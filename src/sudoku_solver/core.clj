@@ -41,10 +41,36 @@
         (throw (Exception. (str "Could not solve puzzle. Got this far:\n" puzzle)))
         (solve-puzzle mutated-puzzle)))))
 
+(defn display-puzzle-row
+  [numbers-row]
+  (apply
+   str
+   (vec
+    (interpose
+     \space
+     (flatten
+      (interpose
+       (flatten
+        (interpose
+         \|
+         (partition 3 numbers-row)))
+       [\| \|]))))))
+
 (defn display-puzzle
   "Displays a puzzle"
   [puzzle]
-  ())
+  (apply str
+         (drop-last
+          (flatten
+           (interpose
+            (interpose
+             [\| \space \- \space \- \space \- \space \| \space \- \space \- \space \- \space \| \space \- \space \- \space \- \space \| \newline]
+             (partition
+              3
+              (map
+               (comp (fn [row] (concat row [\newline])) display-puzzle-row)
+               puzzle)))
+            (repeat 2 [\| \space \- \space \- \space \- \space \- \space \- \space \- \space \- \space \- \space \- \space \- \space \- \space \| \newline]))))))
 
 (defn- coordinates-from-index
   "Converts an index to coordiantes, assuming the quadrant dimension is 3"

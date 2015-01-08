@@ -388,3 +388,8 @@
                               [\5  \8  \2  \3  \4  \7  \6  \1  \9]
                               [\1  \7  \9  \8  \5  \6  \4  \2  \3]])))))
 
+  (deftest display-puzzle-row-test
+    (testing "display-puzzle-row displays the puzzle row"
+      (is (= "| 1 2 3 | 4 5 6 | 7 8 9 |"
+             (display-puzzle-row [1 2 3 4 5 6 7 8 9])))))
+
