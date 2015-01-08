@@ -52,40 +52,54 @@
   [number]
   #(not (= number %)))
 
+(defn- numbers-0-to-2-except
+  "Retuns a sequence of numbers 0 through 2 except for the passed number"
+  [n]
+  (filter (not-equal-to-number n)
+                     (range 3)))
+
 (defn lateral-sibling-quadrants
   "returns quadrants that sit laterally to the passed quadrant"
-  [[x y]]
-  (set (map #(list x %)
-       (filter (not-equal-to-number y)
-                     (range 3)))))
+  [[xq yq]]
+  (set (map #(list xq %)
+       (numbers-0-to-2-except yq))))
 
 (defn vertical-sibling-quadrants
   "returns the quadrants that sit vertically from the passed quadrant"
-  [[x y]]
-  (set (map #(list % y)
-         (filter (not-equal-to-number x)
-                       (range 3)))))
+  [[xq yq]]
+  (set (map #(list % yq)
+         (numbers-0-to-2-except xq))))
+
+(defn- coordinates-of-numbers-in-sibling-quadrants
+  "Returns coordinates of numbers in sibling quadrants"
+  [puzzle quadrant number sibling-quadrants-fn]
+  (remove nil?
+          (map (fn coordinates-of-number-in-quadrant [quadrant-map] (get quadrant-map number))
+               (map (partial get-quadrant puzzle)
+                    (sibling-quadrants-fn quadrant)))))
+
+(defn coordinates-eliminated-by-lateral-siblings
+  [puzzle quadrant number]
+  (reduce (fn accumulate [val a] (apply (partial conj val) a)) #{}
+            (map (fn eliminated-coordinates-based-on-vertical-sibling-coordinates
+                   [[x y :as coordinates]]
+                   (list (list x 0) (list x 1) (list x 2)))
+                 (coordinates-of-numbers-in-sibling-quadrants puzzle quadrant number lateral-sibling-quadrants))))
+
+(defn coordinates-eliminated-by-vertical-siblings
+  [puzzle quadrant number]
+  (reduce (fn accumulate [val a] (apply (partial conj val) a)) #{}
+            (map (fn eliminated-coordinates-based-on-lateral-sibling-coordinates
+                   [[x y :as coordinates]]
+                   (list (list 0 y) (list 1 y) (list 2 y)))
+                 (coordinates-of-numbers-in-sibling-quadrants puzzle quadrant number vertical-sibling-quadrants))))
 
 (defn sibling-eliminated-coordinates
   [puzzle quadrant number]
   (set
    (set/union
-    (reduce (fn accumulate [val a] (apply (partial conj val) a)) #{}
-            (map (fn eliminated-coordinates-based-on-vertical-sibling-coordinates
-                   [[x y :as coordinates]]
-                   (list (list x 0) (list x 1) (list x 2)))
-                 (remove nil?
-                         (map (fn coordinates-of-number-in-quadrant [quadrant-map] (get quadrant-map number))
-                              (map (partial get-quadrant puzzle)
-                                   (lateral-sibling-quadrants quadrant))))))
-    (reduce (fn accumulate [val a] (apply (partial conj val) a)) #{}
-            (map (fn eliminated-coordinates-based-on-lateral-sibling-coordinates
-                   [[x y :as coordinates]]
-                   (list (list 0 y) (list 1 y) (list 2 y)))
-                 (remove nil?
-                         (map (fn coordinates-of-number-in-quadrant [quadrant-map] (get quadrant-map number))
-                              (map (partial get-quadrant puzzle)
-                                   (vertical-sibling-quadrants quadrant)))))))))
+    (coordinates-eliminated-by-lateral-siblings puzzle quadrant number)
+    (coordinates-eliminated-by-vertical-siblings puzzle quadrant number))))
 
 (defn- index-for-coordinates-in-quadrant
   [qi ci]
