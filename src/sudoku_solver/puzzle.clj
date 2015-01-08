@@ -1,17 +1,7 @@
-(ns sudoku-solver.core)
+(ns sudoku-solver.puzzle)
 (require '[clojure.string :as str])
 (require '[clojure.set :as set])
-
-(defn parse-puzzle-file
-  "Generate a list of lists from the sudoku puzzle file"
-  [filepath]
-  (vec (map #(vec %)
-   (map #(map (fn spaces-into-nils [c] (if (= \space c) nil c)) %)
-       (map #(filter (fn not-a-divider [c] (not (= \| c))) %)
-         (map #(flatten (partition 1 2 %))
-              (filter #(not (= \- (nth % 2)))
-                (map #(seq %)
-                   (str/split (slurp filepath) #"\n")))))))))
+(require '[sudoku-solver.convert :as convert])
 
 (defn is-puzzle-complete?
   [puzzle]
@@ -22,8 +12,6 @@
 (defn- int-to-char
   [i]
   (char (+ 48 i)))
-
-(declare display-puzzle)
 
 (defn solve-puzzle
   "Solves the puzzle"
@@ -40,43 +28,8 @@
     (if (is-puzzle-complete? mutated-puzzle)
       mutated-puzzle
       (if (= mutated-puzzle puzzle)
-        (throw (Exception. (str "Could not solve puzzle. Got this far:\n" (display-puzzle puzzle))))
+        (throw (Exception. (str "Could not solve puzzle. Got this far:\n" (convert/display-puzzle puzzle))))
         (solve-puzzle mutated-puzzle)))))
-
-(defn display-puzzle-row
-  [numbers-row]
-  (apply
-   str
-   (vec
-    (interpose
-     \space
-     (flatten
-      (interpose
-       (flatten
-        (interpose
-         \|
-         (partition 3 (replace {nil \space} numbers-row))))
-       [\| \|]))))))
-
-(defn display-puzzle
-  "Displays a puzzle"
-  [puzzle]
-  (apply str
-         (drop-last
-          (flatten
-           (interpose
-            (interpose
-             [\| \space \- \space \- \space \- \space \| \space \- \space \- \space \- \space \| \space \- \space \- \space \- \space \| \newline]
-             (partition
-              3
-              (map
-               (comp (fn [row] (concat row [\newline])) display-puzzle-row)
-               puzzle)))
-            (repeat 2 [\| \space \- \space \- \space \- \space \- \space \- \space \- \space \- \space \- \space \- \space \- \space \- \space \| \newline]))))))
-
-(defn main
-  [args]
-  (println (display-puzzle (solve-puzzle (parse-puzzle-file args)))))
 
 (defn- coordinates-from-index
   "Converts an index to coordiantes, assuming the quadrant dimension is 3"

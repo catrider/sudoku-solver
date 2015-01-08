@@ -1,6 +1,7 @@
 (ns sudoku-solver.core-test
   (:require [clojure.test :refer :all]
-            [sudoku-solver.core :refer :all]))
+            [sudoku-solver.convert :refer :all]
+            [sudoku-solver.puzzle :refer :all]))
 
 (deftest parse-puzzle-file-test
   (testing "parse-easy-puzzle-file"
