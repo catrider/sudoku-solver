@@ -19,7 +19,7 @@
   (let [mutated-puzzle
         (reduce (fn mutated-puzzle
                   [p args]
-                  (assign-number-in-quadrant (first args) (last args) p))
+                  (assign-number-in-quadrant p (first args) (last args)))
                 puzzle
                 (for [x (range 3)
                       y (range 3)
@@ -236,7 +236,7 @@
        ipc))))
 
 (defn assign-number-in-quadrant
-  [[x y :as quadrant] number puzzle]
+  [puzzle [x y :as quadrant] number]
   (if (quadrant-contains-number? puzzle quadrant number)
     puzzle
     (let [possible-coordinates-for-number
