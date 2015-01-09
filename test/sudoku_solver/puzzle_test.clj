@@ -369,3 +369,10 @@
                                   [\1  \4  \3  nil nil nil nil nil nil]
                                   [\7  \2  \6  nil nil nil nil nil nil]])))))
 
+  (deftest reserved-coordinates-within-quadrant-test
+    (testing "reserved-coordinates-within-quadrant identifies two spaces should be reserved if two numbers hsve possible coordinates of only those two coordinates"
+      (is (= (hash-set (list \1 \0) (list \1 \2))
+             (reserved-coordinates-within-quadrant
+              (hash-set (hash-set (list \1 \0) (list \1 \2)) (hash-set (list \1 \0) (list \1 \2))))))))
+
+

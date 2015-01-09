@@ -207,6 +207,41 @@
                  ((partial apply set/union reserved-rows) new-reserved-rows)
                  (inc c)))))))
 
+(defn reserved-coordinates-within-quadrant
+  [coordinate-sets]
+  (let [coordinate-sets-sorted-by-size
+        (sort
+         (fn count-is-less-than
+           [s1 s2]
+           (< (count s1) (count s2)))
+         (seq coordinate-sets))]
+    (loop [cs coordinate-sets-sorted-by-size
+           reserved-coordinates (hash-set)])))
+
+(declare possible-coordinates-for-number-in-quadrant)
+
+(defn- reserved-coordinates-based-on-lateral-siblings
+  "Returns a set of coordinates that are reserved in the passed quadrant based on its lateral siblings"
+  [puzzle quadrant number depth]
+  (reserved-coordinates
+   (reduce
+    (fn [coll q]
+      (conj coll (possible-coordinates-for-number-in-quadrant puzzle q number (inc depth))))
+    '()
+    (filter #(not (quadrant-contains-number? puzzle % number)) (lateral-sibling-quadrants quadrant)))
+   false))
+
+(defn- reserved-coordinates-based-on-vertical-siblings
+  "Returns a set of coordinates that are reserved in the passed quadrant based on its vertical siblings"
+  [puzzle quadrant number depth]
+  (reserved-coordinates
+   (reduce
+    (fn [coll q]
+      (conj coll (possible-coordinates-for-number-in-quadrant puzzle q number (inc depth))))
+    '()
+    (filter #(not (quadrant-contains-number? puzzle % number)) (vertical-sibling-quadrants quadrant)))
+   true))
+
 (defn- possible-coordinates-for-number-in-quadrant
   ([puzzle [qx qy :as quadrant] number]
    (possible-coordinates-for-number-in-quadrant puzzle quadrant number 1))
@@ -219,20 +254,8 @@
      (if (< depth 3)
        (set/difference
         ipc
-        (reserved-coordinates
-         (reduce
-          (fn [coll q]
-            (conj coll (possible-coordinates-for-number-in-quadrant puzzle q number (inc depth))))
-          '()
-          (filter #(not (quadrant-contains-number? puzzle % number)) (vertical-sibling-quadrants quadrant)))
-         true)
-        (reserved-coordinates
-         (reduce
-          (fn [coll q]
-            (conj coll (possible-coordinates-for-number-in-quadrant puzzle q number (inc depth))))
-          '()
-          (filter #(not (quadrant-contains-number? puzzle % number)) (lateral-sibling-quadrants quadrant)))
-         false))
+        (reserved-coordinates-based-on-vertical-siblings puzzle quadrant number (inc depth))
+        (reserved-coordinates-based-on-lateral-siblings puzzle quadrant number (inc depth)))
        ipc))))
 
 (defn assign-number-in-quadrant
