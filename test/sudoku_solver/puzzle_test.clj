@@ -237,14 +237,34 @@
             [\9  \7  \8  nil \6  nil nil nil \3]
             [nil \5  nil \3  nil nil \6  \9  \8]]
            (assign-number-in-quadrant [[\3  \9  nil \8  nil \6  nil \5  nil]
-                                                 [nil nil \6  nil \1  nil \3  \8  nil]
+                                          [nil nil \6  nil \1  nil \3  \8  nil]
                                                  [nil \8  nil nil \3  nil \9  nil \6]
                                                  [\1  \3  \9  \7  \5  \8  \4  \6  \2]
                                                  [nil nil nil \6  \2  \3  \8  \1  \9]
                                                  [\8  \6  \2  nil \9  nil \7  \3  \5]
                                                  [\6  nil \3  nil \8  nil nil \7  nil]
                                                  [\9  \7  \8  nil \6  nil nil nil \3]
-                                                 [nil \5  nil \3  nil nil \6  \9  \8]] '(0 2) \2)))))
+                                                 [nil \5  nil \3  nil nil \6  \9  \8]] '(0 2) \2))))
+
+  (testing "assigns number 3 in seventh quadrant by process of elimination"
+    (is (= [[nil nil nil \2  nil \6  nil \8  \3 ]
+            [nil \2  \3  \7  nil nil nil nil nil]
+            [\5  nil nil nil nil nil \7  nil nil]
+            [nil nil \4  nil nil \2  nil nil \1 ]
+            [nil \8  nil nil nil nil nil \7  nil]
+            [\9  nil nil \1  nil nil \2  nil nil]
+            [\4  \9  \5  \8  \2  \7  nil nil \6 ]
+            [nil \3 nil  \6  \1  \5  \9  \4  \7 ]
+            [\7  \1  \6  \9  \4  \3  nil nil nil]]
+           (assign-number-in-quadrant [[nil nil nil \2  nil \6  nil \8  \3 ]
+                                       [nil \2  \3  \7  nil nil nil nil nil]
+                                       [\5  nil nil nil nil nil \7  nil nil]
+                                       [nil nil \4  nil nil \2  nil nil \1 ]
+                                       [nil \8  nil nil nil nil nil \7  nil]
+                                       [\9  nil nil \1  nil nil \2  nil nil]
+                                       [\4  \9  \5  \8  \2  \7  nil nil \6 ]
+                                       [nil nil nil \6  \1  \5  \9  \4  \7 ]
+                                       [\7  \1  \6  \9  \4  \3  nil nil nil]] '(2 0) \3)))))
 
   (deftest lateral-sibling-quadrants-test
     (testing "lateral-sibling-quadrants"
