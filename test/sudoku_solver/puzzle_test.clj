@@ -1,4 +1,4 @@
-(ns sudoku-solver.puzzle-test
+(ns sudoku-solver.puzzle_test
   (:require [clojure.test :refer :all]
             [sudoku-solver.puzzle :refer :all]))
 
@@ -374,5 +374,3 @@
       (is (= (hash-set (list \1 \0) (list \1 \2))
              (reserved-coordinates-within-quadrant
               (hash-set (hash-set (list \1 \0) (list \1 \2)) (hash-set (list \1 \0) (list \1 \2))))))))
-
-
