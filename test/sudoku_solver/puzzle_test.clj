@@ -264,7 +264,27 @@
                                        [\9  nil nil \1  nil nil \2  nil nil]
                                        [\4  \9  \5  \8  \2  \7  nil nil \6 ]
                                        [nil nil nil \6  \1  \5  \9  \4  \7 ]
-                                       [\7  \1  \6  \9  \4  \3  nil nil nil]] '(2 0) \3)))))
+                                       [\7  \1  \6  \9  \4  \3  nil nil nil]] '(2 0) \3))))
+
+  (testing "assigns number 5 in quadrant 2 by observing that 5 is the only number left of the three to complete the row which can be assigned to coordinate (0,2)"
+    (is (= [[nil \2  \4  \1  nil \5  \3  \7  \9 ]
+            [\3  \1  nil nil nil \9  nil \6  \2 ]
+            [nil \7  nil \2  nil \3  nil \4  \1 ]
+            [\1  \6  \5  \8  \3  \2  \4  \9  \7 ]
+            [nil \9  \3  nil nil nil \6  \2  nil]
+            [nil \4  \2  \9  nil \6  \1  \3  nil]
+            [nil \3  nil \5  nil \8  \2  \1  nil]
+            [\2  \5  nil \6  nil nil \7  \8  \3 ]
+            [nil \8  nil \3  \2  nil \9  \5  nil]]
+           (assign-number-in-quadrant [[nil \2  \4  \1  nil nil \3  \7  \9 ]
+                                       [\3  \1  nil nil nil \9  nil \6  \2 ]
+                                       [nil \7  nil \2  nil \3  nil \4  \1 ]
+                                       [\1  \6  \5  \8  \3  \2  \4  \9  \7 ]
+                                       [nil \9  \3  nil nil nil \6  \2  nil]
+                                       [nil \4  \2  \9  nil \6  \1  \3  nil]
+                                       [nil \3  nil \5  nil \8  \2  \1  nil]
+                                       [\2  \5  nil \6  nil nil \7  \8  \3 ]
+                                       [nil \8  nil \3  \2  nil \9  \5  nil]] '(0 1) \5)))))
 
   (deftest lateral-sibling-quadrants-test
     (testing "lateral-sibling-quadrants"
