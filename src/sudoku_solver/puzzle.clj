@@ -20,8 +20,8 @@
   [puzzle]
   (let [mutated-puzzle
         (reduce (fn mutated-puzzle
-                  [p args]
-                  (assign-number-in-quadrant p (first args) (last args)))
+                  [p [quadrant number]]
+                  (assign-number-in-quadrant p quadrant number))
                 puzzle
                 (for [x (range 3)
                       y (range 3)
@@ -50,15 +50,12 @@
         (flatten (map #(seq-of-three y %)
             (seq-of-three x puzzle))))))
 
-(defn- not-equal-to-number
-  [number]
-  #(not (= number %)))
-
 (defn- numbers-0-to-2-except
   "Retuns a sequence of numbers 0 through 2 except for the passed number"
   [n]
-  (filter (not-equal-to-number n)
-                     (range 3)))
+  (filter
+   (partial not= n)
+   (range 3)))
 
 (defn lateral-sibling-quadrants
   "returns quadrants that sit laterally to the passed quadrant"
