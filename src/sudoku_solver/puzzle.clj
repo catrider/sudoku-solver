@@ -269,24 +269,24 @@
   ([puzzle [qx qy :as quadrant] number]
    (possible-coordinates-for-number-in-quadrant puzzle quadrant number 1))
   ([puzzle [qx qy :as quadrant] number depth]
-   (let [ipc (possible-coordinates-for-number-in-quadrant-simple puzzle quadrant number)]
-     (if (and (< depth 3) (> (count ipc) 1))
-       (let [ipc (set/difference
-                  ipc
-                  (reserved-coordinates-based-on-vertical-siblings puzzle quadrant number (inc depth))
-                  (reserved-coordinates-based-on-lateral-siblings puzzle quadrant number (inc depth)))]
-         (if (> (count ipc) 1)
-           (set/difference
-            ipc
-            (reserved-coordinates-within-quadrant (map
+   (reduce
+    (fn [possible-coordinates reserved-coordinates-fn]
+      (if (and (> (count possible-coordinates) 1) (< depth 3))
+        (set/difference possible-coordinates (reserved-coordinates-fn))
+        possible-coordinates))
+    (set/difference
+     #{'(0 0) '(0 1) '(0 2) '(1 0) '(1 1) '(1 2) '(2 0) '(2 1) '(2 2)}
+     (set (remove nil? (vals (get-quadrant puzzle quadrant))))
+     (sibling-eliminated-coordinates puzzle quadrant number))
+    (list (fn [] (reserved-coordinates-based-on-vertical-siblings puzzle quadrant number (inc depth)))
+          (fn [] (reserved-coordinates-based-on-lateral-siblings puzzle quadrant number (inc depth)))
+          (fn [] (reserved-coordinates-within-quadrant (map
                                                    (fn
                                                      [num]
                                                      (possible-coordinates-for-number-in-quadrant-simple puzzle quadrant num))
                                                    (disj
                                                     #{\1 \2 \3 \4 \5 \6 \7 \8 \9}
-                                                    number))))
-           ipc))
-       ipc))))
+                                                    number))))))))
 
 
 (defn assign-number-in-quadrant
