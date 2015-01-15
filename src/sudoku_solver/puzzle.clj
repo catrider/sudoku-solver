@@ -57,6 +57,13 @@
    (partial not= n)
    (range 3)))
 
+(defn- numbers-1-through-9-except
+  "Returns a sequence of numbers 1 through 9 except for the passed number"
+  [n]
+  (disj
+   #{\1 \2 \3 \4 \5 \6 \7 \8 \9}
+   n))
+
 (defn lateral-sibling-quadrants
   "returns quadrants that sit laterally to the passed quadrant"
   [[xq yq]]
@@ -281,12 +288,8 @@
     (list (fn [] (reserved-coordinates-based-on-vertical-siblings puzzle quadrant number (inc depth)))
           (fn [] (reserved-coordinates-based-on-lateral-siblings puzzle quadrant number (inc depth)))
           (fn [] (reserved-coordinates-within-quadrant (map
-                                                   (fn
-                                                     [num]
-                                                     (possible-coordinates-for-number-in-quadrant-simple puzzle quadrant num))
-                                                   (disj
-                                                    #{\1 \2 \3 \4 \5 \6 \7 \8 \9}
-                                                    number))))))))
+                                                        (partial possible-coordinates-for-number-in-quadrant-simple puzzle quadrant)
+                                                        (numbers-1-through-9-except number))))))))
 
 
 (defn assign-number-in-quadrant
