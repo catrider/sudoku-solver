@@ -286,6 +286,27 @@
                                        [\2  \5  nil \6  nil nil \7  \8  \3 ]
                                        [nil \8  nil \3  \2  nil \9  \5  nil]] '(0 1) \5)))))
 
+(deftest assign-number-in-row-test
+  (testing "assigns-number-in-row-when-that-number-completes-the-row"
+    (is (= [[nil nil nil nil nil nil nil nil nil]
+            [\5  \6  \2  \8  \1  \4  \9  \3  \7 ]
+            [nil nil nil nil nil nil nil nil nil]
+            [nil nil nil nil nil nil nil nil nil]
+            [nil nil nil nil nil nil nil nil nil]
+            [nil nil nil nil nil nil nil nil nil]
+            [nil nil nil nil nil nil nil nil nil]
+            [nil nil nil nil nil nil nil nil nil]
+            [nil nil nil nil nil nil nil nil nil]]
+           (assign-number-in-row               [[nil nil nil nil nil nil nil nil nil]
+                                                [\5  \6  \2  \8  nil  \4  \9  \3  \7]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]] 1 \1)))))
+
   (deftest lateral-sibling-quadrants-test
     (testing "lateral-sibling-quadrants"
       (is (= #{'(0 1) '(0 2)} (lateral-sibling-quadrants '(0 0))))

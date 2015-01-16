@@ -311,3 +311,7 @@
           (if (= 1 (count coordinates-with-number-completes-row-or-column))
             (assign-at-coordinates puzzle quadrant (first coordinates-with-number-completes-row-or-column) number)
             puzzle))))))
+
+(defn assign-number-in-row
+  [puzzle row number]
+  ())
