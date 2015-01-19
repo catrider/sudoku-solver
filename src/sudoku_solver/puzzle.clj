@@ -312,6 +312,26 @@
             (assign-at-coordinates puzzle quadrant (first coordinates-with-number-completes-row-or-column) number)
             puzzle))))))
 
+(defn- possible-column-for-number-in-row
+  [row number]
+  (filter
+   (fn [v]
+     (not= 0 v))
+   (map-indexed
+    (fn [idx itm]
+      (if (nil? itm)
+        idx
+        0))
+    row)))
+
+(defn- assign-number-at-row-and-column
+  [puzzle row-idx column-idx number]
+  (assign-at-coordinates puzzle (list (quot row-idx 3) (quot column-idx 3)) (list (mod row-idx 3) (mod column-idx 3)) number))
+
 (defn assign-number-in-row
-  [puzzle row number]
-  ())
+  [puzzle row-idx number]
+  (let [possible-columns-for-number-in-row
+        (possible-column-for-number-in-row (get puzzle row-idx) number)]
+    (if (= 1 (count possible-columns-for-number-in-row))
+      (assign-number-at-row-and-column puzzle row-idx (first possible-columns-for-number-in-row) number)
+      puzzle)))
