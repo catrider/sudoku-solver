@@ -328,6 +328,10 @@
   [puzzle row-idx column-idx number]
   (assign-at-coordinates puzzle (list (quot row-idx 3) (quot column-idx 3)) (list (mod row-idx 3) (mod column-idx 3)) number))
 
+(defn reserved-columns-for-row
+  [column-sets]
+  (reserved-coordinates-within-quadrant column-sets))
+
 (defn assign-number-in-row
   [puzzle row-idx number]
   (let [possible-columns-for-number-in-row

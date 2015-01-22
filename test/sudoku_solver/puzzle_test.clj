@@ -325,6 +325,11 @@
                                        [\2  \5  nil \6  nil nil \7  \8  \3 ]
                                        [nil \8  nil \3  \2  nil \9  \5  nil]] 0 \5)))))
 
+(deftest reserved-columns-for-row-test
+  (testing "Correctly detects two reserved columns"
+    (is (= #{2 4} (reserved-columns-for-row (list (hash-set 2 4) (hash-set 2 4)))))))
+
+
   (deftest lateral-sibling-quadrants-test
     (testing "lateral-sibling-quadrants"
       (is (= #{'(0 1) '(0 2)} (lateral-sibling-quadrants '(0 0))))
