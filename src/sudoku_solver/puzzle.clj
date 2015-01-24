@@ -325,6 +325,26 @@
   [column-sets]
   (reserved-coordinates-within-quadrant column-sets))
 
+(defn columns-containing-number
+  [puzzle number]
+  (set
+   (map
+    (fn [[column numbers]]
+      (identity column))
+    (filter
+     (fn [[column numbers]]
+       (contains? numbers number))
+     (map-indexed
+      (fn [idx itm]
+        (list idx (set itm)))
+      (map
+       (fn [column-idx]
+         (map
+          (fn [row]
+            (get row column-idx))
+          puzzle))
+       (range 9)))))))
+
 (defn possible-columns-for-number-in-row
   ([puzzle row-idx number]
    (possible-columns-for-number-in-row puzzle row-idx number 1))
@@ -337,7 +357,7 @@
     (set/difference
      (set (range 9))
      (occupied-columns-in-row (get puzzle row-idx)))
-    (list))))
+    (list (fn [] (columns-containing-number puzzle number))))))
 
 (defn assign-number-in-row
   [puzzle row-idx number]

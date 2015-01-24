@@ -305,7 +305,7 @@
                                                 [nil nil nil nil nil nil nil nil nil]
                                                 [nil nil nil nil nil nil nil nil nil]
                                                 [nil nil nil nil nil nil nil nil nil]] 1 \1))))
-  (testing "assigns number in column in row when other column  in row already contains same number in different row"
+  (testing "assigns number in column in row when other column in row already contains same number in different row"
     (is (= [[nil nil nil nil nil nil nil nil nil]
             [\5  nil \2  \8  \3  \4  \9  \1  \7 ]
             [nil nil nil nil nil nil nil nil nil]
@@ -343,6 +343,42 @@
                                        [nil \3  nil \5  nil \8  \2  \1  nil]
                                        [\2  \5  nil \6  nil nil \7  \8  \3 ]
                                        [nil \8  nil \3  \2  nil \9  \5  nil]] 0 \5)))))
+
+(deftest columns-containing-number-test
+  (testing "finds no columns containg number"
+    (is (= #{}
+           (columns-containing-number [[nil nil nil nil nil nil nil nil nil]
+                                       [\5  nil nil nil nil nil \8  nil \6 ]
+                                       [nil nil nil nil \2  nil nil nil nil]
+                                       [nil nil \4  nil nil \9  nil nil nil]
+                                       [nil nil nil nil nil nil nil \5  nil]
+                                       [nil nil nil nil nil nil nil nil \8 ]
+                                       [nil nil nil \8  \1  nil nil nil nil]
+                                       [nil \1  nil nil nil nil nil nil nil]
+                                       [nil nil nil nil nil nil \2  nil nil]] \7))))
+  (testing "finds single column containg number"
+    (is (= #{4}
+           (columns-containing-number [[nil nil nil nil nil nil nil nil nil]
+                                       [\5  nil nil nil nil nil \8  nil \6 ]
+                                       [nil nil nil nil \2  nil nil nil nil]
+                                       [nil nil \4  nil nil \9  nil nil nil]
+                                       [nil nil nil nil nil nil nil \5  nil]
+                                       [nil nil nil nil nil nil nil nil \8 ]
+                                       [nil nil nil \8  \1  nil nil nil nil]
+                                       [nil \1  nil nil \7  nil nil nil nil]
+                                       [nil nil nil nil nil nil \2  nil nil]] \7))))
+  (testing "finds multiple columns containg number"
+    (is (= #{4 8}
+           (columns-containing-number [[nil nil nil nil nil nil nil nil nil]
+                                       [\5  nil nil nil nil nil \8  nil \6 ]
+                                       [nil nil nil nil \2  nil nil nil nil]
+                                       [nil nil \4  nil nil \9  nil nil \7 ]
+                                       [nil nil nil nil nil nil nil \5  nil]
+                                       [nil nil nil nil nil nil nil nil \8 ]
+                                       [nil nil nil \8  \1  nil nil nil nil]
+                                       [nil \1  nil nil \7  nil nil nil nil]
+                                       [nil nil nil nil nil nil \2  nil nil]] \7)))))
+
 
 (deftest reserved-columns-for-row-test
   (testing "Correctly detects two reserved columns"
