@@ -2,6 +2,7 @@
 (require '[clojure.string :as str])
 (require '[clojure.set :as set])
 (require '[sudoku-solver.convert :as convert])
+(require '[sudoku-solver.seq_utils :as seq_utils])
 (require '[clojure.math.combinatorics :as combo])
 
 
@@ -314,15 +315,7 @@
 
 (defn occupied-columns-in-row
   [row]
-  (set (filter
-   (fn [v]
-     (not= -1 v))
-   (map-indexed
-    (fn [idx itm]
-      (if-not (nil? itm)
-        idx
-        -1))
-    row))))
+  (seq_utils/indices-of-seq-whose-vals-satisfy-cond row (complement nil?)))
 
 (defn- assign-number-at-row-and-column
   [puzzle row-idx column-idx number]
@@ -332,12 +325,24 @@
   [column-sets]
   (reserved-coordinates-within-quadrant column-sets))
 
+(defn possible-columns-for-number-in-row
+  ([puzzle row-idx number]
+   (possible-columns-for-number-in-row puzzle row-idx number 1))
+  ([puzzle row-idx number depth]
+   (reduce
+    (fn [possible-columns reserved-columns-fn]
+      (if (and (> (count possible-columns) 1) (< depth 2))
+        (set/difference possible-columns (reserved-columns-fn))
+        possible-columns))
+    (set/difference
+     (set (range 9))
+     (occupied-columns-in-row (get puzzle row-idx)))
+    (list))))
+
 (defn assign-number-in-row
   [puzzle row-idx number]
   (let [possible-columns-for-number-in-row
-        (set/difference
-         (set (range 9))
-         (occupied-columns-in-row (get puzzle row-idx)))]
+        (possible-columns-for-number-in-row puzzle row-idx number)]
     (if (= 1 (count possible-columns-for-number-in-row))
       (assign-number-at-row-and-column puzzle row-idx (first possible-columns-for-number-in-row) number)
       puzzle)))
