@@ -379,6 +379,19 @@
                                        [nil \1  nil nil \7  nil nil nil nil]
                                        [nil nil nil nil nil nil \2  nil nil]] \7)))))
 
+(deftest possible-columns-for-number-in-row-test
+  (testing "possible-columns-for-number-in-row returns column where number already exists"
+    (is (= #{4} (possible-columns-for-number-in-row
+              [[nil nil nil nil nil nil nil nil nil]
+               [\5  nil nil nil nil nil \8  nil \6 ]
+               [nil nil nil nil \2  nil nil nil nil]
+               [nil nil \4  nil nil \9  nil nil \7 ]
+               [nil nil nil nil nil nil nil \5  nil]
+               [nil nil nil nil nil nil nil nil \8 ]
+               [nil nil nil \8  \1  nil nil nil nil]
+               [nil \1  nil nil \7  nil nil nil nil]
+               [nil nil nil nil nil nil \2  nil nil]] 7 \7)))))
+
 
 (deftest reserved-columns-for-row-test
   (testing "Correctly detects two reserved columns"
@@ -493,3 +506,30 @@
       (is (= (hash-set (list \1 \0) (list \1 \2))
              (reserved-coordinates-within-quadrant
               (list (hash-set (list \1 \0) (list \1 \2)) (hash-set (list \1 \0) (list \1 \2))))))))
+
+  (deftest row-contains-number?-test
+    (testing "row-contains-number?"
+      (is (= true (row-contains-number? [[nil nil nil nil nil nil nil nil nil]
+                                         [\5  \6  \2  \8  nil  \4  \9  \3  \7]
+                                         [nil nil nil nil nil nil nil nil nil]
+                                         [nil nil nil nil nil nil nil nil nil]
+                                         [nil nil nil nil nil nil nil nil nil]
+                                         [nil nil nil nil nil nil nil nil nil]
+                                         [nil nil nil nil nil nil nil nil nil]
+                                         [nil nil nil nil nil nil nil nil nil]
+                                         [nil nil nil nil nil nil nil nil nil]], 1, \8)))
+      (is (= false (row-contains-number? [[nil nil nil nil nil nil nil nil nil]
+                                         [\5  \6  \2  \8  nil  \4  \9  \3  \7]
+                                         [nil nil nil nil nil nil nil nil nil]
+                                         [nil nil nil nil nil nil nil nil nil]
+                                         [nil nil nil nil nil nil nil nil nil]
+                                         [nil nil nil nil nil nil nil nil nil]
+                                         [nil nil nil nil nil nil nil nil nil]
+                                         [nil nil nil nil nil nil nil nil nil]
+                                         [nil nil nil nil nil nil nil nil nil]], 1, \1)))))
+
+  (deftest columns-in-row-containing-number-test
+    (testing "columns-in-row-containing-number"
+      (is (= 5 (column-in-row-containing-number [\2 nil \5 \3 nil \9 \1 \8 nil] \9)))
+      (is (= 0 (column-in-row-containing-number [\2 nil \5 \3 nil \9 \1 \8 nil] \2)))
+      (is (= nil (column-in-row-containing-number [\2 nil \5 \3 nil \9 \1 \8 nil] \4)))))

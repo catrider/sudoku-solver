@@ -164,6 +164,14 @@
   [puzzle quadrant number]
   (not (nil? (get (get-quadrant puzzle quadrant) number))))
 
+(defn row-contains-number?
+  [puzzle row-idx number]
+  (boolean
+   (some
+    (fn [n]
+      (= number n))
+    (get puzzle row-idx))))
+
 (defn reserved-coordinates-within-quadrant
   [coordinate-sets]
   (if (< 20 (reduce (fn total-coordinates [c s] (+ c (count s))) 0 coordinate-sets))
@@ -345,19 +353,39 @@
           puzzle))
        (range 9)))))))
 
+(defn column-in-row-containing-number
+  [row number]
+  (first
+   (map
+    (fn [[idx n]]
+      (identity idx))
+    (filter
+     (fn [[idx n]]
+       (= n number))
+     (map-indexed
+      (fn [idx number]
+        (list idx number))
+      row)))))
+
 (defn possible-columns-for-number-in-row
   ([puzzle row-idx number]
    (possible-columns-for-number-in-row puzzle row-idx number 1))
   ([puzzle row-idx number depth]
-   (reduce
-    (fn [possible-columns reserved-columns-fn]
-      (if (and (> (count possible-columns) 1) (< depth 2))
-        (set/difference possible-columns (reserved-columns-fn))
-        possible-columns))
-    (set/difference
-     (set (range 9))
-     (occupied-columns-in-row (get puzzle row-idx)))
-    (list (fn [] (columns-containing-number puzzle number))))))
+   (if (row-contains-number? puzzle row-idx number)
+     (hash-set (column-in-row-containing-number (get puzzle row-idx) number))
+     (reduce
+      (fn [possible-columns reserved-columns-fn]
+        (if (and (> (count possible-columns) 1) (< depth 3))
+          (set/difference possible-columns (reserved-columns-fn))
+          possible-columns))
+      (set/difference
+       (set (range 9))
+       (occupied-columns-in-row (get puzzle row-idx)))
+      (list (fn [] (columns-containing-number puzzle number))
+            (fn [] (reserved-columns-for-row (map
+                                              (fn [n]
+                                                (possible-columns-for-number-in-row puzzle row-idx n (inc depth)))
+                                              (numbers-1-through-9-except number)))))))))
 
 (defn assign-number-in-row
   [puzzle row-idx number]
