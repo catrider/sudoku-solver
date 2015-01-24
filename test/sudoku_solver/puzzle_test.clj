@@ -305,6 +305,25 @@
                                                 [nil nil nil nil nil nil nil nil nil]
                                                 [nil nil nil nil nil nil nil nil nil]
                                                 [nil nil nil nil nil nil nil nil nil]] 1 \1))))
+  (testing "assigns number in column in row when other column  in row already contains same number in different row"
+    (is (= [[nil nil nil nil nil nil nil nil nil]
+            [\5  nil \2  \8  \3  \4  \9  \1  \7 ]
+            [nil nil nil nil nil nil nil nil nil]
+            [nil nil nil nil nil nil nil nil nil]
+            [nil nil nil nil nil nil nil nil nil]
+            [nil nil nil nil nil nil nil nil nil]
+            [nil nil nil nil nil nil nil nil nil]
+            [nil \1  nil nil nil nil nil nil nil]
+            [nil nil nil nil nil nil nil nil nil]]
+           (assign-number-in-row               [[nil nil nil nil nil nil nil nil nil]
+                                                [\5  nil \2  \8  \3  \4  \9  nil \7 ]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [nil \1  nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil nil]] 1 \1))))
   (testing "assigns number 5 in quadrant 2 by observing that 5 is the only number left of the three to complete the row which can be assigned to coordinate (0,2)"
     (is (= [[nil \2  \4  \1  nil \5  \3  \7  \9 ]
             [\3  \1  nil nil nil \9  nil \6  \2 ]
