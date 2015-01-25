@@ -333,17 +333,7 @@
           (possible-coordinates-for-number-in-quadrant puzzle quadrant number)]
       (if (= 1 (count possible-coordinates-for-number))
         (assign-at-coordinates puzzle quadrant (first possible-coordinates-for-number) number)
-        (let [coordinates-with-number-completes-row-or-column
-              (filter
-               (fn number-at-coordinate-completes-row-or-column
-                 [coordinates]
-                 (or
-                  (number-at-coordinates-in-quadrant-completes-row? puzzle quadrant coordinates number)
-                  (number-at-coordinates-in-quadrant-completes-column? puzzle quadrant coordinates number)))
-               possible-coordinates-for-number)]
-          (if (= 1 (count coordinates-with-number-completes-row-or-column))
-            (assign-at-coordinates puzzle quadrant (first coordinates-with-number-completes-row-or-column) number)
-            puzzle))))))
+        puzzle))))
 
 (defn occupied-columns-in-row
   [row]
