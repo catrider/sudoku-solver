@@ -35,11 +35,11 @@
                       y (range 3)
                       number (map int-to-char (range 1 10))]
                   (list (list x y) number)))]
-      (if (is-puzzle-complete? mutated-puzzle)
-        mutated-puzzle
-        (if (= mutated-puzzle puzzle)
-          (throw (Exception. (str "Could not solve puzzle. Got this far:\n" (convert/display-puzzle puzzle))))
-          (solve-puzzle mutated-puzzle)))))
+    (if (is-puzzle-complete? mutated-puzzle)
+      mutated-puzzle
+      (if (= mutated-puzzle puzzle)
+        (throw (Exception. (str "Could not solve puzzle. Got this far:\n" (convert/display-puzzle puzzle))))
+        (solve-puzzle mutated-puzzle)))))
 
 (defn- coordinates-from-index
   "Converts an index to coordiantes, assuming the quadrant dimension is 3"
@@ -54,9 +54,9 @@
   "Returns the nth quadrant in the form of a map"
   [puzzle [x y]]
   (apply (partial merge {\1 nil \2 nil \3 nil \4 nil \5 nil \6 nil \7 nil \8 nil \9 nil})
-      (map-indexed (fn [idx itm] (if (nil? itm) {} (hash-map itm (coordinates-from-index idx))))
-        (flatten (map #(seq-of-three y %)
-            (seq-of-three x puzzle))))))
+         (map-indexed (fn [idx itm] (if (nil? itm) {} (hash-map itm (coordinates-from-index idx))))
+                      (flatten (map #(seq-of-three y %)
+                                    (seq-of-three x puzzle))))))
 
 (defn- numbers-0-to-2-except
   "Retuns a sequence of numbers 0 through 2 except for the passed number"
@@ -100,18 +100,18 @@
 (defn coordinates-eliminated-by-lateral-siblings
   [puzzle quadrant number]
   (reduce (fn accumulate [val a] (apply (partial conj val) a)) #{}
-            (map (fn eliminated-coordinates-based-on-vertical-sibling-coordinates
-                   [[x y :as coordinates]]
-                   (list (list x 0) (list x 1) (list x 2)))
-                 (coordinates-of-numbers-in-sibling-quadrants puzzle quadrant number lateral-sibling-quadrants))))
+          (map (fn eliminated-coordinates-based-on-vertical-sibling-coordinates
+                 [[x y :as coordinates]]
+                 (list (list x 0) (list x 1) (list x 2)))
+               (coordinates-of-numbers-in-sibling-quadrants puzzle quadrant number lateral-sibling-quadrants))))
 
 (defn coordinates-eliminated-by-vertical-siblings
   [puzzle quadrant number]
   (reduce (fn accumulate [val a] (apply (partial conj val) a)) #{}
-            (map (fn eliminated-coordinates-based-on-lateral-sibling-coordinates
-                   [[x y :as coordinates]]
-                   (list (list 0 y) (list 1 y) (list 2 y)))
-                 (coordinates-of-numbers-in-sibling-quadrants puzzle quadrant number vertical-sibling-quadrants))))
+          (map (fn eliminated-coordinates-based-on-lateral-sibling-coordinates
+                 [[x y :as coordinates]]
+                 (list (list 0 y) (list 1 y) (list 2 y)))
+               (coordinates-of-numbers-in-sibling-quadrants puzzle quadrant number vertical-sibling-quadrants))))
 
 (defn sibling-eliminated-coordinates
   [puzzle quadrant number]
@@ -201,7 +201,7 @@
   (if (< 20 (reduce (fn total-coordinates [c s] (+ c (count s))) 0 coordinate-sets))
     (hash-set)
     (loop [unique-coordinates (reduce set/union coordinate-sets)
-         reserved-coordinates (hash-set)]
+           reserved-coordinates (hash-set)]
       (if (empty? unique-coordinates)
         reserved-coordinates
         (let [uq (first unique-coordinates)]
@@ -237,7 +237,7 @@
                                       (or
                                        (= 1 (count x))
                                        (= 2 ((frequencies (possible-columns c)) x))))
-                                      (possible-columns c))]
+                                    (possible-columns c))]
           (recur (group-by
                   count
                   (map
@@ -256,11 +256,11 @@
       (if (> c 2)
         (set (mapcat #(list (list % 0) (list % 1) (list % 2)) reserved-rows))
         (let [new-reserved-rows (filter
-                                    (fn [x]
-                                      (or
-                                       (= 1 (count x))
-                                       (= 2 ((frequencies (possible-rows c)) x))))
-                                      (possible-rows c))]
+                                 (fn [x]
+                                   (or
+                                    (= 1 (count x))
+                                    (= 2 ((frequencies (possible-rows c)) x))))
+                                 (possible-rows c))]
           (recur (group-by
                   count
                   (map
