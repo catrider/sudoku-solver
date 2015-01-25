@@ -489,6 +489,25 @@
                           [nil \3  nil \2  \1  \9  nil nil \7 ]
                           [nil \8  \2  nil \4  nil nil nil nil]
                           [\1  \7  nil nil nil nil \4  nil nil]]))))
+  (testing "solve-puzzle solves the medium puzzle"
+    (is (= [[\3  \9  \7  \8  \4  \6  \2  \5  \1 ]
+            [\4  \2  \6  \5  \1  \9  \3  \8  \7 ]
+            [\5  \8  \1  \2  \3  \7  \9  \4  \6 ]
+            [\1  \3  \9  \7  \5  \8  \4  \6  \2 ]
+            [\7  \4  \5  \6  \2  \3  \8  \1  \9 ]
+            [\8  \6  \2  \1  \9  \4  \7  \3  \5 ]
+            [\6  \1  \3  \9  \8  \2  \5  \7  \4 ]
+            [\9  \7  \8  \4  \6  \5  \1  \2  \3 ]
+            [\2  \5  \4  \3  \7  \1  \6  \9  \8 ]]
+           (solve-puzzle [[nil \9  nil nil nil \6  nil \5  nil]
+                          [nil nil nil nil \1  nil \3  \8  nil]
+                          [nil \8  nil nil \3  nil nil nil \6 ]
+                          [\1  \3  \9  nil nil nil \4  \6  nil]
+                          [nil nil nil \6  nil \3  nil nil nil]
+                          [nil \6  \2  nil nil nil \7  \3  \5 ]
+                          [\6  nil nil nil \8  nil nil \7  nil]
+                          [nil \7  \8  nil \6  nil nil nil nil]
+                          [nil \5  nil \3  nil nil nil \9  nil]]))))
   (testing "solve-puzzle throws an exception if it is unable to solve the puzzle"
     (is (thrown? Exception
                  (solve-puzzle [[nil nil nil nil nil nil nil nil nil]
