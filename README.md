@@ -8,6 +8,7 @@ lein run <path-to-sudoku-puzzle>
 
 Puzzles should be in plain text files and look like this:
 
+```
 | - - - - - - - - - - - |
 |     8 |       |   3 1 |
 |       |   6   | 2 7   |
@@ -21,9 +22,11 @@ Puzzles should be in plain text files and look like this:
 |   8 2 |   4   |       |
 | 1 7   |       | 4     |
 | - - - - - - - - - - - |
+```
 
 Here's an empty template
 
+```
 | - - - - - - - - - - - |
 |       |       |       |
 |       |       |       |
@@ -37,7 +40,7 @@ Here's an empty template
 |       |       |       |
 |       |       |       |
 | - - - - - - - - - - - |
-
+```
 
 ## License
 
