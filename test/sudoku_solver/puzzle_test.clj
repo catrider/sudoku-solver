@@ -344,6 +344,27 @@
                                        [\2  \5  nil \6  nil nil \7  \8  \3 ]
                                        [nil \8  nil \3  \2  nil \9  \5  nil]] 0 \5)))))
 
+(deftest assign-number-in-column-test
+  (testing "assigns number in column when it completes the column"
+    (is (= [[nil nil nil nil nil nil nil nil \6 ]
+            [nil nil nil nil nil nil nil nil \3 ]
+            [nil nil nil nil nil nil nil nil \2 ]
+            [nil nil nil nil nil nil nil nil \8 ]
+            [nil nil nil nil nil nil nil nil \9 ]
+            [nil nil nil nil nil nil nil nil \5 ]
+            [nil nil nil nil nil nil nil nil \7 ]
+            [nil nil nil nil nil nil nil nil \4 ]
+            [nil nil nil nil nil nil nil nil \1 ]]
+           (assign-number-in-column            [[nil nil nil nil nil nil nil nil \6 ]
+                                                [nil nil nil nil nil nil nil nil \3 ]
+                                                [nil nil nil nil nil nil nil nil \2 ]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil \9 ]
+                                                [nil nil nil nil nil nil nil nil \5 ]
+                                                [nil nil nil nil nil nil nil nil \7 ]
+                                                [nil nil nil nil nil nil nil nil \4 ]
+                                                [nil nil nil nil nil nil nil nil \1 ]] 8 \8)))))
+
 (deftest columns-containing-number-test
   (testing "finds no columns containg number"
     (is (= #{}

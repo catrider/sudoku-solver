@@ -401,3 +401,7 @@
     (if (= 1 (count possible-columns-for-number-in-row))
       (assign-number-at-row-and-column puzzle row-idx (first possible-columns-for-number-in-row) number)
       puzzle)))
+
+(defn assign-number-in-column
+  [puzzle column-idx number]
+  ())
