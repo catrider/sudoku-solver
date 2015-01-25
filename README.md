@@ -4,7 +4,7 @@ A Clojure library designed to solve sudoku puzzles
 
 ## Usage
 
-lein run <path-to-sudoku-puzzle>
+lein run &lt;path-to-sudoku-puzzle&gt;
 
 Puzzles should be in plain text files and look like this:
 
