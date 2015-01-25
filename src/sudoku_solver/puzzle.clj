@@ -172,12 +172,24 @@
   (not (nil? (get (get-quadrant puzzle quadrant) number))))
 
 (defn row-contains-number?
-  [puzzle row-idx number]
+  ([puzzle row-idx number]
+   (row-contains-number? (get puzzle row-idx) number))
+  ([row number]
+   (boolean
+    (some
+     (fn [n]
+       (= number n))
+     row))))
+
+(declare get-column)
+
+(defn column-contains-number?
+  [puzzle column-idx number]
   (boolean
    (some
     (fn [n]
       (= number n))
-    (get puzzle row-idx))))
+    (get-column puzzle column-idx))))
 
 (defn reserved-coordinates-within-quadrant
   [coordinate-sets]
@@ -332,6 +344,10 @@
   [row]
   (seq_utils/indices-of-seq-whose-vals-satisfy-cond row (complement nil?)))
 
+(defn occupied-rows-in-column
+  [column]
+  (seq_utils/indices-of-seq-whose-vals-satisfy-cond column (complement nil?)))
+
 (defn- assign-number-at-row-and-column
   [puzzle row-idx column-idx number]
   (assign-at-coordinates puzzle (list (quot row-idx 3) (quot column-idx 3)) (list (mod row-idx 3) (mod column-idx 3)) number))
@@ -339,6 +355,10 @@
 (defn reserved-columns-for-row
   [column-sets]
   (reserved-coordinates-within-quadrant column-sets))
+
+(defn reserved-rows-for-column
+  [row-sets]
+  (reserved-coordinates-within-quadrant row-sets))
 
 (defn columns-containing-number
   [puzzle number]
@@ -360,6 +380,13 @@
           puzzle))
        (range 9)))))))
 
+(defn rows-containing-number
+  [puzzle number]
+  (seq_utils/indices-of-seq-whose-vals-satisfy-cond
+   puzzle
+   (fn [itm]
+     (row-contains-number? itm number))))
+
 (defn column-in-row-containing-number
   [row number]
   (first
@@ -373,6 +400,17 @@
       (fn [idx number]
         (list idx number))
       row)))))
+
+(defn row-in-column-containing-number
+  [column number]
+  (first (seq_utils/indices-of-seq-whose-vals-satisfy-cond column (partial = number))))
+
+(defn get-column
+  [puzzle column-idx]
+  (map
+   (fn [row]
+     (get row column-idx))
+   puzzle))
 
 (defn possible-columns-for-number-in-row
   ([puzzle row-idx number]
@@ -394,6 +432,27 @@
                                                 (possible-columns-for-number-in-row puzzle row-idx n (inc depth)))
                                               (numbers-1-through-9-except number)))))))))
 
+(defn possible-rows-for-number-in-column
+  ([puzzle column-idx number]
+   (possible-rows-for-number-in-column puzzle column-idx number 1))
+  ([puzzle column-idx number depth]
+   (if (column-contains-number? puzzle column-idx number)
+     (hash-set (row-in-column-containing-number (get-column puzzle column-idx) number))
+     (reduce
+      (fn [possible-rows reserved-rows-fn]
+        (if (and (> (count possible-rows) 1) (< depth 3))
+          (set/difference possible-rows (reserved-rows-fn))
+          possible-rows))
+      (set/difference
+       (set (range 9))
+       (occupied-rows-in-column (get-column puzzle column-idx)))
+      (list (fn [] (rows-containing-number puzzle number))
+            (fn [] (reserved-rows-for-column (map
+                                              (fn [n]
+                                                (possible-rows-for-number-in-column puzzle column-idx n (inc depth)))
+                                              (numbers-1-through-9-except number)))))))))
+
+
 (defn assign-number-in-row
   [puzzle row-idx number]
   (let [possible-columns-for-number-in-row
@@ -404,4 +463,8 @@
 
 (defn assign-number-in-column
   [puzzle column-idx number]
-  ())
+  (let [possible-rows-for-number-in-column
+        (possible-rows-for-number-in-column puzzle column-idx number)]
+    (if (= 1 (count possible-rows-for-number-in-column))
+      (assign-number-at-row-and-column puzzle (first possible-rows-for-number-in-column) column-idx number)
+      puzzle)))

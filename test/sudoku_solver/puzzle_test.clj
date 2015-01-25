@@ -363,7 +363,67 @@
                                                 [nil nil nil nil nil nil nil nil \5 ]
                                                 [nil nil nil nil nil nil nil nil \7 ]
                                                 [nil nil nil nil nil nil nil nil \4 ]
-                                                [nil nil nil nil nil nil nil nil \1 ]] 8 \8)))))
+                                                [nil nil nil nil nil nil nil nil \1 ]] 8 \8))))
+
+  (testing "does nothing if it cannot assign a number in column"
+    (is (= [[nil nil nil nil nil nil nil nil nil ]
+            [nil nil nil nil nil nil nil nil \3 ]
+            [nil nil nil nil nil nil nil nil \2 ]
+            [nil nil nil nil nil nil nil nil nil ]
+            [nil nil nil nil nil nil nil nil \9 ]
+            [nil nil nil nil nil nil nil nil \5 ]
+            [nil nil nil nil nil nil nil nil \7 ]
+            [nil nil nil nil nil nil nil nil \4 ]
+            [nil nil nil nil nil nil nil nil \1 ]]
+           (assign-number-in-column            [[nil nil nil nil nil nil nil nil nil ]
+                                                [nil nil nil nil nil nil nil nil \3 ]
+                                                [nil nil nil nil nil nil nil nil \2 ]
+                                                [nil nil nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil \9 ]
+                                                [nil nil nil nil nil nil nil nil \5 ]
+                                                [nil nil nil nil nil nil nil nil \7 ]
+                                                [nil nil nil nil nil nil nil nil \4 ]
+                                                [nil nil nil nil nil nil nil nil \1 ]] 8 \8))))
+
+  (testing "assigns number in row in column when other row in column already contains same number in different column"
+    (is (= [[nil nil nil nil nil nil nil nil \8 ]
+            [nil nil nil nil nil nil nil nil \3 ]
+            [nil nil nil nil nil nil nil nil \2 ]
+            [nil nil \8  nil nil nil nil nil nil]
+            [nil nil nil nil nil nil nil nil \9 ]
+            [nil nil nil nil nil nil nil nil \5 ]
+            [nil nil nil nil nil nil nil nil \7 ]
+            [nil nil nil nil nil nil nil nil \4 ]
+            [nil nil nil nil nil nil nil nil \1 ]]
+           (assign-number-in-column            [[nil nil nil nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil \3 ]
+                                                [nil nil nil nil nil nil nil nil \2 ]
+                                                [nil nil \8  nil nil nil nil nil nil]
+                                                [nil nil nil nil nil nil nil nil \9 ]
+                                                [nil nil nil nil nil nil nil nil \5 ]
+                                                [nil nil nil nil nil nil nil nil \7 ]
+                                                [nil nil nil nil nil nil nil nil \4 ]
+                                                [nil nil nil nil nil nil nil nil \1 ]] 8 \8))))
+
+  (testing "assigns number 5 in quadrant 4 by observing that 5 is the only number left of the three to complete the row which can be assigned to coordinate (2,0)"
+    (is (= [[nil \3  nil \1  nil nil nil \2  nil]
+            [\2  \1  \7  \6  \9  \4  \3  \5  \8 ]
+            [\4  nil nil \5  \3  \2  nil nil nil]
+            [\1  nil \2  \8  nil \9  \5  \6  \3 ]
+            [nil nil nil \3  nil nil nil nil \2 ]
+            [\5  \9  \3  \2  nil \6  \8  nil nil]
+            [\3  nil nil \4  \6  \1  \2  \7  \9 ]
+            [\7  \6  \4  \9  \2  \3  \1  \8  \5 ]
+            [\9  \2  \1  \7  nil nil nil \3  nil]]
+           (assign-number-in-column   [[nil \3  nil \1  nil nil nil \2  nil]
+                                       [\2  \1  \7  \6  \9  \4  \3  \5  \8 ]
+                                       [\4  nil nil \5  \3  \2  nil nil nil]
+                                       [\1  nil \2  \8  nil \9  \5  \6  \3 ]
+                                       [nil nil nil \3  nil nil nil nil \2 ]
+                                       [nil \9  \3  \2  nil \6  \8  nil nil]
+                                       [\3  nil nil \4  \6  \1  \2  \7  \9 ]
+                                       [\7  \6  \4  \9  \2  \3  \1  \8  \5 ]
+                                       [\9  \2  \1  \7  nil nil nil \3  nil]] 0 \5)))))
 
 (deftest columns-containing-number-test
   (testing "finds no columns containg number"
@@ -391,6 +451,42 @@
   (testing "finds multiple columns containg number"
     (is (= #{4 8}
            (columns-containing-number [[nil nil nil nil nil nil nil nil nil]
+                                       [\5  nil nil nil nil nil \8  nil \6 ]
+                                       [nil nil nil nil \2  nil nil nil nil]
+                                       [nil nil \4  nil nil \9  nil nil \7 ]
+                                       [nil nil nil nil nil nil nil \5  nil]
+                                       [nil nil nil nil nil nil nil nil \8 ]
+                                       [nil nil nil \8  \1  nil nil nil nil]
+                                       [nil \1  nil nil \7  nil nil nil nil]
+                                       [nil nil nil nil nil nil \2  nil nil]] \7)))))
+
+(deftest row-containing-number-test
+  (testing "finds no rows containg number"
+    (is (= #{}
+           (rows-containing-number [[nil nil nil nil nil nil nil nil nil]
+                                       [\5  nil nil nil nil nil \8  nil \6 ]
+                                       [nil nil nil nil \2  nil nil nil nil]
+                                       [nil nil \4  nil nil \9  nil nil nil]
+                                       [nil nil nil nil nil nil nil \5  nil]
+                                       [nil nil nil nil nil nil nil nil \8 ]
+                                       [nil nil nil \8  \1  nil nil nil nil]
+                                       [nil \1  nil nil nil nil nil nil nil]
+                                       [nil nil nil nil nil nil \2  nil nil]] \7))))
+
+  (testing "finds single row containg number"
+    (is (= #{7}
+           (rows-containing-number [[nil nil nil nil nil nil nil nil nil]
+                                       [\5  nil nil nil nil nil \8  nil \6 ]
+                                       [nil nil nil nil \2  nil nil nil nil]
+                                       [nil nil \4  nil nil \9  nil nil nil]
+                                       [nil nil nil nil nil nil nil \5  nil]
+                                       [nil nil nil nil nil nil nil nil \8 ]
+                                       [nil nil nil \8  \1  nil nil nil nil]
+                                       [nil \1  nil nil \7  nil nil nil nil]
+                                       [nil nil nil nil nil nil \2  nil nil]] \7))))
+  (testing "finds multiple rows containg number"
+    (is (= #{3 7}
+           (rows-containing-number [[nil nil nil nil nil nil nil nil nil]
                                        [\5  nil nil nil nil nil \8  nil \6 ]
                                        [nil nil nil nil \2  nil nil nil nil]
                                        [nil nil \4  nil nil \9  nil nil \7 ]
@@ -573,3 +669,16 @@
     (is (= 5 (column-in-row-containing-number [\2 nil \5 \3 nil \9 \1 \8 nil] \9)))
     (is (= 0 (column-in-row-containing-number [\2 nil \5 \3 nil \9 \1 \8 nil] \2)))
     (is (= nil (column-in-row-containing-number [\2 nil \5 \3 nil \9 \1 \8 nil] \4)))))
+
+(deftest get-column-test
+  (testing "gets the column from the puzzle"
+    (is (= [\3 \5 \8 nil \9 \1 \4 \7 nil]
+           (get-column [[nil \3  nil \1  nil \3  nil \2  nil]
+                        [\2  \1  \7  \6  \9  \5  \3  \5  \8 ]
+                        [\4  nil nil \5  \3  \8  nil nil nil]
+                        [\1  nil \2  \8  nil nil \5  \6  \3 ]
+                        [nil nil nil \3  nil \9  nil nil \2 ]
+                        [nil \9  \3  \2  nil \1  \8  nil nil]
+                        [\3  nil nil \4  \6  \4  \2  \7  \9 ]
+                        [\7  \6  \4  \9  \2  \7  \1  \8  \5 ]
+                        [\9  \2  \1  \7  nil nil nil \3  nil]] 5)))))
