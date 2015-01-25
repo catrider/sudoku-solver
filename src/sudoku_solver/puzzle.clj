@@ -72,17 +72,22 @@
    #{\1 \2 \3 \4 \5 \6 \7 \8 \9}
    n))
 
+(defn- sibling-quadrants
+  [c coordinate-fn]
+  (set
+   (map
+    coordinate-fn
+    (numbers-0-to-2-except c))))
+
 (defn lateral-sibling-quadrants
   "returns quadrants that sit laterally to the passed quadrant"
   [[xq yq]]
-  (set (map #(list xq %)
-       (numbers-0-to-2-except yq))))
+  (sibling-quadrants yq #(list xq %)))
 
 (defn vertical-sibling-quadrants
   "returns the quadrants that sit vertically from the passed quadrant"
   [[xq yq]]
-  (set (map #(list % yq)
-         (numbers-0-to-2-except xq))))
+  (sibling-quadrants xq #(list % yq)))
 
 (defn- coordinates-of-numbers-in-sibling-quadrants
   "Returns coordinates of numbers in sibling quadrants"
