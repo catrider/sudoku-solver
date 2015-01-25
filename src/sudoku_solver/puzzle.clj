@@ -12,34 +12,34 @@
 
 (declare assign-number-in-quadrant)
 (declare assign-number-in-row)
+(declare assign-number-in-column)
 
 (defn- int-to-char
   [i]
   (char (+ 48 i)))
+
+(defn quadrant-to-idx
+  [[qx qy :as quadrant]]
+  (+ (* 3 qx) qy))
 
 (defn solve-puzzle
   "Solves the puzzle"
   [puzzle]
   (let [mutated-puzzle
         (reduce (fn [p [quadrant number]]
-                  (assign-number-in-quadrant p quadrant number))
+                  ((comp (fn [pm] (assign-number-in-row pm (quadrant-to-idx quadrant) number))
+                         (fn [pm] (assign-number-in-column pm (quadrant-to-idx quadrant) number))
+                         assign-number-in-quadrant) p quadrant number))
                 puzzle
                 (for [x (range 3)
                       y (range 3)
                       number (map int-to-char (range 1 10))]
                   (list (list x y) number)))]
-    (let [mutated-puzzle-2
-          (reduce (fn [p [row-idx number]]
-                    (assign-number-in-row p row-idx number))
-                  mutated-puzzle
-                  (for [row-idx (range 9)
-                        number (map int-to-char (range 1 10))]
-                    (list row-idx number)))]
-      (if (is-puzzle-complete? mutated-puzzle-2)
-        mutated-puzzle-2
-        (if (= mutated-puzzle-2 puzzle)
+      (if (is-puzzle-complete? mutated-puzzle)
+        mutated-puzzle
+        (if (= mutated-puzzle puzzle)
           (throw (Exception. (str "Could not solve puzzle. Got this far:\n" (convert/display-puzzle puzzle))))
-          (solve-puzzle mutated-puzzle-2))))))
+          (solve-puzzle mutated-puzzle)))))
 
 (defn- coordinates-from-index
   "Converts an index to coordiantes, assuming the quadrant dimension is 3"

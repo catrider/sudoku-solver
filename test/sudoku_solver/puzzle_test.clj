@@ -682,3 +682,15 @@
                         [\3  nil nil \4  \6  \4  \2  \7  \9 ]
                         [\7  \6  \4  \9  \2  \7  \1  \8  \5 ]
                         [\9  \2  \1  \7  nil nil nil \3  nil]] 5)))))
+
+(deftest quadrant-to-idx-test
+  (testing "quadrant-to-idx"
+    (is (= 0 (quadrant-to-idx '(0 0))))
+    (is (= 1 (quadrant-to-idx '(0 1))))
+    (is (= 2 (quadrant-to-idx '(0 2))))
+    (is (= 3 (quadrant-to-idx '(1 0))))
+    (is (= 4 (quadrant-to-idx '(1 1))))
+    (is (= 5 (quadrant-to-idx '(1 2))))
+    (is (= 6 (quadrant-to-idx '(2 0))))
+    (is (= 7 (quadrant-to-idx '(2 1))))
+    (is (= 8 (quadrant-to-idx '(2 2))))))
