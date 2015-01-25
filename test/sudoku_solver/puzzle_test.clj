@@ -606,6 +606,7 @@
                           [nil \3  nil \2  \1  \9  nil nil \7 ]
                           [nil \8  \2  nil \4  nil nil nil nil]
                           [\1  \7  nil nil nil nil \4  nil nil]]))))
+
   (testing "solve-puzzle solves the medium puzzle"
     (is (= [[\3  \9  \7  \8  \4  \6  \2  \5  \1 ]
             [\4  \2  \6  \5  \1  \9  \3  \8  \7 ]
@@ -625,6 +626,27 @@
                           [\6  nil nil nil \8  nil nil \7  nil]
                           [nil \7  \8  nil \6  nil nil nil nil]
                           [nil \5  nil \3  nil nil nil \9  nil]]))))
+
+  (testing "solve-puzzle solves hard puzzles"
+    (is (= [[\1  \7  \9  \2  \5  \6  \4  \8  \3 ]
+            [\6  \2  \3  \7  \8  \4  \1  \5  \9 ]
+            [\5  \4  \8  \3  \9  \1  \7  \6  \2 ]
+            [\3  \6  \4  \5  \7  \2  \8  \9  \1 ]
+            [\2  \8  \1  \4  \3  \9  \6  \7  \5 ]
+            [\9  \5  \7  \1  \6  \8  \2  \3  \4 ]
+            [\4  \9  \5  \8  \2  \7  \3  \1  \6 ]
+            [\8  \3  \2  \6  \1  \5  \9  \4  \7 ]
+            [\7  \1  \6  \9  \4  \3  \5  \2  \8 ]]
+           (solve-puzzle [[nil nil nil \2  nil \6  nil \8  \3 ]
+                          [nil \2  \3  \7  nil nil nil nil nil]
+                          [\5  nil nil nil nil nil \7  nil nil]
+                          [nil nil \4  nil nil \2  nil nil \1 ]
+                          [nil \8  nil nil nil nil nil \7  nil]
+                          [\9  nil nil \1  nil nil \2  nil nil]
+                          [nil nil \5  nil nil nil nil nil \6 ]
+                          [nil nil nil nil nil \5  \9  \4  nil]
+                          [\7  \1  nil \9  nil \3  nil nil nil]]))))
+
   (testing "solve-puzzle throws an exception if it is unable to solve the puzzle"
     (is (thrown? Exception
                  (solve-puzzle [[nil nil nil nil nil nil nil nil nil]
