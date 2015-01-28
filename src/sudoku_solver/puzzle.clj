@@ -284,7 +284,7 @@
     (fn [coll q]
       (conj coll (possible-coordinates-for-number-in-quadrant puzzle q number (inc depth))))
     '()
-    (filter #(not (quadrant-contains-number? puzzle % number)) (lateral-sibling-quadrants quadrant)))
+    (remove #(quadrant-contains-number? puzzle % number) (lateral-sibling-quadrants quadrant)))
    false))
 
 (defn- reserved-coordinates-based-on-vertical-siblings
@@ -295,7 +295,7 @@
     (fn [coll q]
       (conj coll (possible-coordinates-for-number-in-quadrant puzzle q number (inc depth))))
     '()
-    (filter #(not (quadrant-contains-number? puzzle % number)) (vertical-sibling-quadrants quadrant)))
+    (remove #(quadrant-contains-number? puzzle % number) (vertical-sibling-quadrants quadrant)))
    true))
 
 (defn- possible-coordinates-for-number-in-quadrant-simple
